@@ -1,0 +1,50 @@
+@startuml CSHDDatabase
+
+hide circle
+skinparam Linetype ortho
+
+entity Game {
+    * id: <<autoincrement>>
+    ---
+    * name: Text
+    * description: Text
+    * coverPicture : Text
+    * officialPage: Text
+    * rating: Number
+    releaseDate: Date
+}
+
+entity GameMode {
+    * id: <<autoincrement>>
+    ---
+    * name
+}
+
+entity Genre {
+    * id: <<autoincrement>>
+    ---
+    * name: Text
+    * description: Text
+}
+
+entity Developer {
+    * id: <<autoincrement>>
+    ---
+    * name: Text
+    description: Text
+}
+
+entity Platform {
+    * id: <<autoincrement>>
+    ---
+    * name: Text
+    * description: Text
+    * officialPage: Text
+}
+
+Game }o..|| Developer
+Game }o..|{ Genre
+Game }o..|{ GameMode
+Game }o..|{ Platform
+
+@enduml

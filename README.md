@@ -92,19 +92,19 @@ If you have run out of energy or time for your project, put a note at the top of
 
 ## TODOS
 ### BACKEND
-[ ] ERD MODEL
-[ ] DATA
-[ ] PRISMA STUDIO
-[ ] PRISMA QUERIES
-[ ] REST API
-[ ] SERVER HOSTING (and other final techinal stuff...)
+- [ ] ERD MODEL
+- [ ] DATA
+- [ ] PRISMA STUDIO
+- [ ] PRISMA QUERIES
+- [ ] REST API
+- [ ] SERVER HOSTING (and other final techinal stuff...)
 
 ### FRONTEND
-[ ] HTML TEMPLATES
-[ ] CSS STYLES
-[ ] REACT COMPONENTS
-[ ] REACT ROUTING
+- [ ] HTML TEMPLATES
+- [ ] CSS STYLES
+- [ ] REACT COMPONENTS
+- [ ] REACT ROUTING
 
 ### OTHER
-[ ] PRESENTATION
-[ ] :green_block:
+- [ ] PRESENTATION
+- [ ] :green_block:

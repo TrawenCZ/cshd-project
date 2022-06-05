@@ -1,0 +1,73 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Game {
+  id           String         @id @default(uuid())
+  name         String
+  description  String
+  coverPicture String
+  officialPage String
+  rating       Int
+  releaseDate  DateTime
+  gameModes    GameMode[]
+  genres       Genre[]
+  developer    Developer     @relation(fields: [developerId], reference: [id])
+  developerId  String
+  platforms    Platform[]
+  reviews      Review[]
+}
+
+model GameMode {
+  id     String       @id @default(uuid())
+  name   String
+  games  Game[]
+}
+
+model Genre {
+  id           String       @id @default(uuid())
+  name         String
+  description  String
+  games        Game[]
+}
+
+model Developer {
+  id           String       @id @default(uuid())
+  name         String
+  description  String       @default("No description yet")
+  games        Game[]
+}
+
+model Platform {
+  id           String       @id @default(uuid())
+  name         String
+  description  String
+  officialPage String
+  games        Game[]
+}
+
+model Review {
+  id           String       @id @default(uuid())
+  header       String
+  starCount    Int
+  description  String
+  game         Game         @relation(fields: [gameId], reference: [id])
+  gameId       String
+  user         User         @relation(fields: [userId], reference: [id])
+  userId       String
+}
+
+model User {
+  id               String         @id @default(uuid())
+  username         String
+  password         String
+  aboutMe          String
+  isAdmin          Boolean        @default(false)
+  profilePicture   String         @default("defaultAvatar.png")
+  reviews          Review[]
+}

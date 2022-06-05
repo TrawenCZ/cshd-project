@@ -42,9 +42,29 @@ entity Platform {
     * officialPage: Text
 }
 
+entity User {
+    * id: <<autoincrement>>
+    ---
+    * username : Text
+    * password : Text
+    * aboutMe : Text
+    * isAdmin : Boolean
+    profilePicture : Text
+}
+
+entity Review {
+    * id: <<autoincrement>>
+    ---
+    * header : Text
+    * starCount : Number
+    * description : Text
+}
+
 Game }o..|| Developer
 Game }o..|{ Genre
 Game }o..|{ GameMode
 Game }o..|{ Platform
+Game ||..o{ Review
+User ||..o{ Review
 
 @enduml

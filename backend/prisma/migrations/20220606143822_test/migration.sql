@@ -43,7 +43,7 @@ CREATE TABLE "Platform" (
 CREATE TABLE "Review" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "header" TEXT NOT NULL,
-    "starCount" INTEGER NOT NULL,
+    "rating" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "gameId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -84,6 +84,9 @@ CREATE TABLE "_GameToPlatform" (
     CONSTRAINT "_GameToPlatform_A_fkey" FOREIGN KEY ("A") REFERENCES "Game" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "_GameToPlatform_B_fkey" FOREIGN KEY ("B") REFERENCES "Platform" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_GameToGameMode_AB_unique" ON "_GameToGameMode"("A", "B");

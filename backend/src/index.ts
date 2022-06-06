@@ -23,21 +23,28 @@ api.get('/', (req, res) => res.send({
   message: "Welcome to API for CSHD"
 }));
 
-/**
- * Resource games
- */
 api.get('/api/games', games.list);
-api.post('/api/games', games.store);
+api.get('/api/games/:id', games.getOne)
 
-
-/**
- * Resource gameModes
- */
 api.get('/api/gameModes', gameModes.list)
 api.get('/api/gameModes/:id', gameModes.getOne)
+
+api.get('/api/genres', genres.list)
+api.get('/api/genres/:id', genres.getOne)
+
+api.get('/api/developers', developers.list)
+api.get('/api/developers/:id', developers.getOne)
+
+api.get('/api/platforms', platforms.list)
+api.get('/api/platforms/:id', platforms.getOne)
+
+api.get('/api/reviews', reviews.list)
+api.get('/api/reviews/:id', reviews.getOne)
+api.post('/api/reviews', reviews.store)
+
 
 /**
  * Start listening on connections
  */
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 api.listen(port, () => console.log(`App listening on port ${port}`))

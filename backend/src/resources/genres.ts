@@ -1,10 +1,12 @@
 import {number, object, string, ValidationError} from 'yup';
 import {Request, Response} from 'express'
-import prisma from '../client';
+import prismaClient from '../client';
+
+
 
 export const getAll = async () => {
     try {
-        return await prisma.accomodation.findMany();
+        return await prismaClient.game;
     } catch (e) {
         console.log(e);
         return null;

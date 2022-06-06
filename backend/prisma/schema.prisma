@@ -17,7 +17,7 @@ model Game {
   releaseDate  DateTime
   gameModes    GameMode[]
   genres       Genre[]
-  developer    Developer     @relation(fields: [developerId], reference: [id])
+  developer    Developer     @relation(fields: [developerId], references: [id])
   developerId  String
   platforms    Platform[]
   reviews      Review[]
@@ -56,9 +56,9 @@ model Review {
   header       String
   starCount    Int
   description  String
-  game         Game         @relation(fields: [gameId], reference: [id])
+  game         Game         @relation(fields: [gameId], references: [id])
   gameId       String
-  user         User         @relation(fields: [userId], reference: [id])
+  user         User         @relation(fields: [userId], references: [id])
   userId       String
 }
 

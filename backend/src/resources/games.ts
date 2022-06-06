@@ -18,7 +18,7 @@ export const list = async (req: Request, res: Response) => {
 
         const games = await prisma.game.findMany({
             skip: page * 10,
-            take: 10
+            take: 10,
         })
 
         return res.send({

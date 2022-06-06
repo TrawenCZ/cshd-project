@@ -42,6 +42,9 @@ api.get('/api/reviews', reviews.list)
 api.get('/api/reviews/:id', reviews.getOne)
 api.post('/api/reviews', reviews.store)
 
+api.get('/api/users', users.list)
+api.get('/api/users/:id', users.getOne)
+api.post('/api/users', users.store)
 
 /**
  * Start listening on connections

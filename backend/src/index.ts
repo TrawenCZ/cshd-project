@@ -1,5 +1,5 @@
 import express from 'express'
-import { games, gameModes, genres, developers, platforms, reviews, users } from './resources'
+import {games, gameModes, genres, developers, platforms, reviews, users, search} from './resources'
 
 const api = express()
 
@@ -22,6 +22,8 @@ api.get('/', (req, res) => res.send({
   data: {},
   message: "Welcome to API for CSHD"
 }));
+
+api.get('/api/search', search)
 
 api.get('/api/games', games.list);
 api.get('/api/games/:id', games.getOne)

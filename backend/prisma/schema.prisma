@@ -8,19 +8,27 @@ generator client {
 }
 
 model Game {
-  id           String         @id @default(uuid())
-  name         String
-  description  String
-  coverPicture String
-  officialPage String
-  rating       Int
-  releaseDate  DateTime
-  gameModes    GameMode[]
-  genres       Genre[]
-  developer    Developer     @relation(fields: [developerId], references: [id])
-  developerId  String
-  platforms    Platform[]
-  reviews      Review[]
+  id            String         @id @default(uuid())
+  name          String
+  description   String
+  coverPicture  String
+  otherPictures Image[]
+  officialPage  String
+  rating        Int
+  releaseDate   DateTime
+  gameModes     GameMode[]
+  genres        Genre[]
+  developer     Developer     @relation(fields: [developerId], references: [id])
+  developerId   String
+  platforms     Platform[]
+  reviews       Review[]
+}
+
+model Image {
+  id        String  @id @default(uuid())
+  source    String
+  game      Game    @relation(fields: [gameId], references: [id])
+  gameId    String
 }
 
 model GameMode {

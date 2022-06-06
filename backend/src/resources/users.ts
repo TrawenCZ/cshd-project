@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import prisma from '../client';
-import {number, object, string, ValidationError} from "yup";
+import {object, string, ValidationError} from "yup";
+import sha256 from "fast-sha256";
 
 export const list = async (req: Request, res: Response) => {
     try {
@@ -23,16 +24,51 @@ export const list = async (req: Request, res: Response) => {
     }
 }
 
+export const getOne = async (req: Request, res: Response) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: req.params.id
+            },
+            include: {
+                reviews: {
+                    select: {
+                        id: true,
+                        header: true,
+                        rating: true,
+                        game: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return res.send({
+            status: "success",
+            data: user,
+        })
+    } catch (e) {
+        return res.status(500).send({
+            status: "error",
+            data: {},
+            message: "Something went wrong"
+        });
+    }
+}
+
 const userSchema = object({
     username: string().required(),
     password: string().required(),
     aboutMe: string().default(""),
+    profilePicture: string().optional()
 });
 
 export const store = async (req: Request, res: Response) => {
     try {
         const data = await userSchema.validate(req.body);
-        const password = stringHash(data.password);
+        const password = sha256(Buffer.from(data.password)).toString();
 
         const user = await prisma.user.findUnique({
             where: {
@@ -40,7 +76,7 @@ export const store = async (req: Request, res: Response) => {
             }
         })
         if (user) {
-            res.status(400).send({
+            return res.status(400).send({
                 status: "error",
                 data: {},
                 message: "Username already taken"
@@ -49,18 +85,14 @@ export const store = async (req: Request, res: Response) => {
 
         const newUser = await prisma.user.create({
             data: {
-                ...data
+                ...data,
+                password: password
             }
         })
         return res.send({
             status: "success",
             data: newUser,
         })
-
-
-
-
-
     } catch (e) {
         if (e instanceof ValidationError) {
             return res.status(400).send({

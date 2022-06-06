@@ -9,7 +9,13 @@ export const list = async (req: Request, res: Response) => {
         const { user, game } = req.body
         let reviews
 
-        if (user) {
+        if (user && game) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Request body must contain only userID or only gameID"
+            });
+        } else if (user) {
             reviews = await prisma.review.findMany({
                 where: {
                     userId: user
@@ -17,7 +23,7 @@ export const list = async (req: Request, res: Response) => {
                 skip: page * 10,
                 take: 10
             })
-        } else {
+        } else if (game) {
             reviews = await prisma.review.findMany({
                 where: {
                     gameId: game
@@ -25,7 +31,14 @@ export const list = async (req: Request, res: Response) => {
                 skip: page * 10,
                 take: 10
             })
+        } else {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "There must be a request body containing userID or gameID"
+            });
         }
+
 
         return res.send({
             status: "success",
@@ -69,7 +82,7 @@ export const getOne = async (req: Request, res: Response) => {
     }
 }
 
-const reviewSchema = object({
+const newReviewSchema = object({
     userId: string().required(),
     gameId: string().required(),
     header: string().required(),
@@ -79,7 +92,7 @@ const reviewSchema = object({
 
 export const store = async (req: Request, res: Response) => {
     try {
-        const data = await reviewSchema.validate(req.body);
+        const data = await newReviewSchema.validate(req.body);
         if (data.rating > 100 || data.rating < 0) {
             return res.status(400).send({
                 status: "error",
@@ -178,5 +191,78 @@ export const store = async (req: Request, res: Response) => {
             message: "Something went wrong"
         });
     }
+}
 
+const removeReviewSchema = object({
+    userId: string().required()
+});
+
+export const remove = async (req: Request, res: Response) => {
+    try {
+        const data = await removeReviewSchema.validate(req.body)
+        const senderId = req.header('X-User')!
+        const user = await prisma.user.findUnique({
+            where: {
+                id: data.userId
+            }
+        })
+
+        if (data.userId !== senderId) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "Not authorized to delete given message"
+            });
+        }
+
+        if (user && !user.isAdmin) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "User is not an admin!"
+            });
+        } else if (!user) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "User does not exist"
+            });
+        }
+
+        const review = await prisma.review.findUnique({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (!review) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Review does not exist"
+            });
+        }
+
+        const deletedReview = await prisma.review.delete({
+            where: {
+                id: req.params.id
+            }
+        })
+        return res.send({
+            status: "success",
+            data: deletedReview,
+        })
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            return res.status(400).send({
+                status: "error",
+                data: e.errors,
+                message: e.message
+            });
+        }
+        return res.status(500).send({
+            status: "error",
+            data: {},
+            message: "Something went wrong"
+        });
+    }
 }

@@ -1,16 +1,5 @@
-import {number, object, string, ValidationError} from 'yup';
 import {Request, Response} from 'express'
 import prisma from '../client';
-
-const gameFilterSchema = object({
-    name: string().required(),
-    description: string().default("Description will be added"),
-    mainPhoto: string().required(),
-    userId: string().required(),
-    location: string().required(),
-    price: number().required()
-});
-
 
 export const list = async (req: Request, res: Response) => {
     try {
@@ -43,21 +32,25 @@ export const getOne = async (req: Request, res: Response) => {
             include: {
                 gameModes: {
                     select: {
+                        id: true,
                         name: true
                     }
                 },
                 genres: {
                     select: {
+                        id: true,
                         name: true
                     }
                 },
                 developer: {
                     select: {
+                        id: true,
                         name: true
                     }
                 },
                 platforms: {
                     select: {
+                        id: true,
                         name: true,
                         officialPage: true
                     }

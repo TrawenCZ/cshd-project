@@ -41,8 +41,9 @@ api.get('/api/platforms/:id', platforms.getOne)
 api.get('/api/reviews', reviews.list)
 api.get('/api/reviews/:id', reviews.getOne)
 api.post('/api/reviews', reviews.store)
+api.delete('/api/reviews/:id', reviews.remove)
 
-api.get('/api/users', users.list)
+//api.get('/api/users', users.list)
 api.get('/api/users/:id', users.getOne)
 api.post('/api/users', users.store)
 

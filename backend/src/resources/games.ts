@@ -22,8 +22,12 @@ export const list = async (req: Request, res: Response) => {
             select: {
                 id: true,
                 name: true,
-                coverPicture: true,
                 rating: true,
+                pictures: {
+                    where: {
+                        isMain: true
+                    }
+                }
             },
             skip: page * 10,
             take: 10,

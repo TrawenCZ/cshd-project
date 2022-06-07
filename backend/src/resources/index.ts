@@ -34,7 +34,11 @@ export const search = async (req: Request, res: Response) => {
             select: {
                 id: true,
                 name: true,
-                coverPicture: true,
+                pictures: {
+                    where: {
+                        isMain: true
+                    }
+                }
             },
             orderBy: {
                 rating: "desc"

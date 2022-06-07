@@ -242,6 +242,36 @@ export const remove = async (req: Request, res: Response) => {
             });
         }
 
+        const game = await prisma.game.findUnique({
+            where: {
+                id: review.gameId
+            },
+            include: {
+                _count: {
+                    select: {
+                        reviews: true
+                    }
+                }
+            }
+        })
+        if (!game) {
+            return res.status(500).send({
+                status: "error",
+                data: {},
+                message: "Game was not found"
+            });
+        }
+
+        const newRating = Math.round((game._count.reviews * game.rating - review.rating) / (game._count.reviews - 1))
+        const updatedGame = await prisma.game.update({
+            where: {
+                id: review.gameId
+            },
+            data: {
+                rating: newRating
+            }
+        })
+
         const deletedReview = await prisma.review.delete({
             where: {
                 id: req.params.id
@@ -250,6 +280,119 @@ export const remove = async (req: Request, res: Response) => {
         return res.send({
             status: "success",
             data: deletedReview,
+        })
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            return res.status(400).send({
+                status: "error",
+                data: e.errors,
+                message: e.message
+            });
+        }
+        return res.status(500).send({
+            status: "error",
+            data: {},
+            message: "Something went wrong"
+        });
+    }
+}
+
+const updateReviewSchema = object({
+    userId: string().required(),
+    header: string().optional(),
+    rating: number().optional(),
+    description: string().optional()
+});
+
+export const update = async (req: Request, res: Response) => {
+    try {
+        const data = await updateReviewSchema.validate(req.body)
+        const senderId = req.header('X-User')!
+        const user = await prisma.user.findUnique({
+            where: {
+                id: data.userId
+            }
+        })
+
+        if (!user) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "User does not exist"
+            });
+        }
+
+        const review = await prisma.review.findUnique({
+            where: {
+                id: req.params.id
+            }
+        })
+
+        if (!review) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Review does not exist"
+            });
+        }
+
+        if (data.rating) {
+            if (data.rating > 100 || data.rating < 0) {
+                return res.status(400).send({
+                    status: "error",
+                    data: {},
+                    message: "Rating must be in range 0-100"
+                });
+            }
+            const game = await prisma.game.findUnique({
+                where: {
+                    id: review.gameId
+                },
+                include: {
+                    _count: {
+                        select: {
+                            reviews: true
+                        }
+                    }
+                }
+            })
+            if (!game) {
+                return res.status(500).send({
+                    status: "error",
+                    data: {},
+                    message: "Game was not found"
+                });
+            }
+            const newRating = Math.round((game._count.reviews * game.rating - review.rating + data.rating) / (game._count.reviews))
+            const updatedGame = await prisma.game.update({
+                where: {
+                    id: review.gameId
+                },
+                data: {
+                    rating: newRating
+                }
+            })
+        }
+
+        if (data.userId !== senderId) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "Not authorized to delete given message"
+            });
+        }
+
+        const updatedReview = await prisma.review.update({
+            where: {
+                id: req.params.id
+            },
+            data: {
+                ...data
+            }
+        })
+        return res.send({
+            status: "success",
+            data: updatedReview,
         })
     } catch (e) {
         if (e instanceof ValidationError) {

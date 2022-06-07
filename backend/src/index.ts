@@ -25,7 +25,7 @@ api.get('/', (req, res) => res.send({
 
 api.get('/api/search', search)
 
-api.get('/api/games', games.list);
+api.get('/api/games', games.list)
 api.get('/api/games/:id', games.getOne)
 
 api.get('/api/gameModes', gameModes.list)
@@ -43,6 +43,7 @@ api.get('/api/platforms/:id', platforms.getOne)
 api.get('/api/reviews', reviews.list)
 api.get('/api/reviews/:id', reviews.getOne)
 api.post('/api/reviews', reviews.store)
+api.post('/api/reviews/:id', reviews.update)
 api.delete('/api/reviews/:id', reviews.remove)
 
 //api.get('/api/users', users.list)

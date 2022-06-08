@@ -59,8 +59,8 @@ export const search = async (req: Request, res: Response) => {
             orderBy: {
                 name: "asc"
             },
-            skip: page * 10,
-            take: 10
+            skip: page * 5,
+            take: 5
         })
         const users = await prisma.user.findMany({
             where: {
@@ -83,8 +83,8 @@ export const search = async (req: Request, res: Response) => {
             orderBy: {
                 username: "asc"
             },
-            skip: page * 10,
-            take: 10
+            skip: page * 5,
+            take: 5
         })
         const developers = await prisma.developer.findMany({
             where: {
@@ -106,8 +106,8 @@ export const search = async (req: Request, res: Response) => {
             orderBy: {
                 name: "asc"
             },
-            skip: page * 10,
-            take: 10
+            skip: page * 5,
+            take: 5
         })
         const output = {
             games: games,

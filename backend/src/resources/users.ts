@@ -87,6 +87,9 @@ export const store = async (req: Request, res: Response) => {
             data: {
                 ...data,
                 password: password
+            },
+            select: {
+                id: true
             }
         })
         return res.send({
@@ -102,6 +105,64 @@ export const store = async (req: Request, res: Response) => {
             });
         }
 
+        return res.status(500).send({
+            status: "error",
+            data: {},
+            message: "Something went wrong"
+        });
+    }
+}
+
+const loginSchema = object({
+    username: string().required(),
+    password: string().required()
+});
+
+export const login = async (req: Request, res: Response) => {
+    try {
+        const data = await loginSchema.validate(req.body)
+
+        const user = await prisma.user.findUnique({
+            where: {
+                username: data.username
+            },
+            select : {
+                id: true,
+                password: true
+            }
+        })
+
+        if (!user) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Invalid username"
+            });
+        }
+
+        const givenPasswordHash = sha256(Buffer.from(data.password)).toString();
+        if (givenPasswordHash !== user.password) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Invalid password"
+            });
+        }
+        return res.send({
+            status: "success",
+            data: {
+                id: user.id
+            },
+        })
+
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            return res.status(400).send({
+                status: "error",
+                data: e.errors,
+                message: e.message
+            });
+        }
         return res.status(500).send({
             status: "error",
             data: {},

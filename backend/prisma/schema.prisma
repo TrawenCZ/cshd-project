@@ -77,6 +77,6 @@ model User {
   password         String
   aboutMe          String
   isAdmin          Boolean        @default(false)
-  profilePicture   String         @default("defaultAvatar.png")
+  profilePicture   String         @default("https://www.rockandpop.eu/wp-content/plugins/buddyboss-platform/bp-core/images/profile-avatar-buddyboss.png")
   reviews          Review[]
 }

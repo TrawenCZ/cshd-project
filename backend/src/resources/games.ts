@@ -87,6 +87,14 @@ export const getOne = async (req: Request, res: Response) => {
                 },
             }
         })
+
+        if (!game) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Game not found"
+            });
+        }
         return res.send({
             status: "success",
             data: game,

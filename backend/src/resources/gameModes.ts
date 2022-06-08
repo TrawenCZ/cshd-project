@@ -43,6 +43,13 @@ export const getOne = async (req: Request, res: Response) => {
         }
       }
     })
+    if (!gameMode) {
+      return res.status(400).send({
+        status: "error",
+        data: {},
+        message: "Game mode not found"
+      });
+    }
     return res.send({
       status: "success",
       data: gameMode,

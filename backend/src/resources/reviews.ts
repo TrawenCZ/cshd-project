@@ -201,12 +201,6 @@ export const remove = async (req: Request, res: Response) => {
     try {
         const data = await removeReviewSchema.validate(req.body)
         const senderId = req.header('X-User')!
-        const user = await prisma.user.findUnique({
-            where: {
-                id: data.userId
-            }
-        })
-
         if (data.userId !== senderId) {
             return res.status(403).send({
                 status: "error",
@@ -215,6 +209,11 @@ export const remove = async (req: Request, res: Response) => {
             });
         }
 
+        const user = await prisma.user.findUnique({
+            where: {
+                id: data.userId
+            }
+        })
         if (user && !user.isAdmin) {
             return res.status(403).send({
                 status: "error",

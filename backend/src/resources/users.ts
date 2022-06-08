@@ -30,7 +30,12 @@ export const getOne = async (req: Request, res: Response) => {
             where: {
                 id: req.params.id
             },
-            include: {
+            select: {
+                id: true,
+                username: true,
+                aboutMe: true,
+                isAdmin: true,
+                profilePicture: true,
                 reviews: {
                     select: {
                         id: true,
@@ -45,6 +50,13 @@ export const getOne = async (req: Request, res: Response) => {
                 }
             }
         })
+        if (!user) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "User not found"
+            });
+        }
         return res.send({
             status: "success",
             data: user,
@@ -68,7 +80,7 @@ const userSchema = object({
 export const store = async (req: Request, res: Response) => {
     try {
         const data = await userSchema.validate(req.body);
-        const password = sha256(Buffer.from(data.password)).toString();
+        const password = new TextDecoder().decode(sha256(Buffer.from(data.password)))
 
         const user = await prisma.user.findUnique({
             where: {
@@ -140,7 +152,7 @@ export const login = async (req: Request, res: Response) => {
             });
         }
 
-        const givenPasswordHash = sha256(Buffer.from(data.password)).toString();
+        const givenPasswordHash = new TextDecoder().decode(sha256(Buffer.from(data.password)))
         if (givenPasswordHash !== user.password) {
             return res.status(400).send({
                 status: "error",

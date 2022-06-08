@@ -1,6 +1,7 @@
 import {number, object, string, ValidationError} from 'yup';
 import {Request, Response} from 'express'
 import prisma from '../client';
+import {genres} from "./index";
 
 export const list = async (req: Request, res: Response) => {
     try {
@@ -43,6 +44,13 @@ export const getOne = async (req: Request, res: Response) => {
                 }
             }
         })
+        if (!genre) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Genre not found"
+            });
+        }
         return res.send({
             status: "success",
             data: genre,

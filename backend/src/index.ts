@@ -1,5 +1,6 @@
 import express from 'express'
 import {games, gameModes, genres, developers, platforms, reviews, users, search} from './resources'
+import cors from 'cors'
 
 const api = express()
 
@@ -8,6 +9,11 @@ const api = express()
  */
 api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
+
+/**
+  * CORS
+  */
+api.use(cors());
 
 /**
  * Serve static content from public directory for images

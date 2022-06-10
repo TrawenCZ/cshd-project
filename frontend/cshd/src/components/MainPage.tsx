@@ -1,10 +1,13 @@
 import useSWR from 'swr';
 import fetcher from '../models/fetcher';
-import HeaderMenu from './HeaderMenu'
+import HeaderMenu from './Header'
 //import { game } from '../models/types';
 
-import { Layout, Card, Row, Col } from 'antd'
-import { Children } from 'react';
+import { Layout, Card, Row, Col, Input } from 'antd'
+import { Link } from 'react-router-dom';
+import LayoutHeader from './Header';
+
+const { Search } = Input;
 const { Header, Footer, Sider, Content, } = Layout;
 
 function MainPage() {
@@ -28,9 +31,7 @@ function MainPage() {
   return (
     <>
     <Layout>
-      <Header>
-        <HeaderMenu />
-      </Header>
+      <LayoutHeader />
       <Content>
         {rows.map((row: any) => (
           <Row gutter={[0, 0]} style={{ alignItems: "center" }}
@@ -40,8 +41,9 @@ function MainPage() {
                 <Card 
                   title={game.name}
                   bordered={false}
+                  hoverable={true}
                   style={{ width: 300 }}
-                  cover={<img src={game.pictures[0].source} alt={game.pictures[0].alt}></img>}
+                  cover={<Link to={`/game/${game.id}`}><img src={game.pictures[0].source} alt={game.pictures[0].alt}></img></Link>}
                 >
                   
                 </Card>

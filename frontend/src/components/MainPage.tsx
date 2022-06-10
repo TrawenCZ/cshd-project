@@ -33,24 +33,23 @@ function MainPage() {
     <Layout>
       <LayoutHeader />
       <Content>
-        {rows.map((row: any) => (
-          <Row gutter={[0, 0]} style={{ alignItems: "center" }}
-          justify="center">
-            {row.map((game: any) => (
-              <Col>
-                <Card 
-                  title={game.name}
-                  bordered={false}
-                  hoverable={true}
-                  style={{ width: 300 }}
-                  cover={<Link to={`/game/${game.id}`}><img src={game.pictures[0].source} alt={game.pictures[0].alt}></img></Link>}
-                >
-                  
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        ))}
+        <Row gutter={[5, 5]} style={{ alignItems: "center" }}
+            justify="center">
+              {games.map((game: any) => (
+                <Col>
+                  <Card 
+                    title={game.name}
+                    bordered={true}
+                    hoverable={true}
+                    extra={<h1>{game.rating}</h1>}
+                    style={{ width: 264 }}
+                    cover={<Link to={`/game/${game.id}`}><img src={game.pictures[0].source} alt={game.pictures[0].alt}></img></Link>}
+                  >
+                    
+                  </Card>
+                </Col>
+              ))}
+        </Row>
       </Content>
       <Footer>Footer</Footer>
     </Layout>

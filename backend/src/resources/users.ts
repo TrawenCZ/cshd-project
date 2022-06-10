@@ -41,9 +41,11 @@ export const getOne = async (req: Request, res: Response) => {
                         id: true,
                         header: true,
                         rating: true,
+                        description: true,
                         game: {
                             select: {
-                                name: true
+                                name: true,
+                                pictures: true,
                             }
                         }
                     }

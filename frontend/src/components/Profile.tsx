@@ -4,16 +4,18 @@ import fetcher from '../models/fetcher';
 import { Layout } from 'antd'
 import TextArea from 'antd/lib/input/TextArea';
 import { useParams } from 'react-router-dom';
+import {SmallUserReview} from './SmallUserReview'
+
 const { Content } = Layout;
 
-export interface ProfilePromps {
+export interface ProfileProps {
     id:string,
     username:string,
     password:string,
     aboutMe:string,
     isAdmin:boolean,
     profilePicture:string,
-    reviews: any[]
+    reviews:any[]
 }
 function Profile() {
     const { id } = useParams()
@@ -21,13 +23,15 @@ function Profile() {
     if (error) return <div>failed to load</div>;
     if (!data) return <div>loading...</div>;
 
-  const user: ProfilePromps  = data.data;
+  const user: ProfileProps  = data.data;
   return (
     <>
       <Content>
         <p>{user.username}</p>
         <img src={user.profilePicture} alt="User's personal icon"/>
         <TextArea rows={4} value={user.aboutMe} disabled/>
+        {user.reviews.map((review) =>  <SmallUserReview key={review.id} {...review}/>)}
+
       </Content>
     </>
   );

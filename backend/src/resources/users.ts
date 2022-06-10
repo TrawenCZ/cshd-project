@@ -192,9 +192,14 @@ const userUpdateSchema = object({
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const data = await userUpdateSchema.validate(req.body);
-        if (data.password) {
-            data.password = new TextDecoder().decode(sha256(Buffer.from(data.password)))
+        const data = await userUpdateSchema.validate(req.body)
+        const senderId = req.header('X-User')!
+        if (req.params.id !== senderId) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "Not authorized to update given profile"
+            });
         }
 
         const user = await prisma.user.findUnique({
@@ -211,13 +216,17 @@ export const update = async (req: Request, res: Response) => {
             })
         }
 
+        if (data.password) {
+            data.password = new TextDecoder().decode(sha256(Buffer.from(data.password)))
+        }
+
         if (data.username) {
-            const usernameExist = await prisma.user.findUnique({
+            const usernameTaken = await prisma.user.findUnique({
                 where: {
                     username: data.username
                 }
             })
-            if (usernameExist) {
+            if (usernameTaken) {
                 return res.status(400).send({
                     status: "error",
                     data: {},

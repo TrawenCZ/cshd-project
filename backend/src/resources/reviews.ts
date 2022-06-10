@@ -214,13 +214,8 @@ export const remove = async (req: Request, res: Response) => {
                 id: data.userId
             }
         })
-        if (user && !user.isAdmin) {
-            return res.status(403).send({
-                status: "error",
-                data: {},
-                message: "User is not an admin!"
-            });
-        } else if (!user) {
+
+        if (!user) {
             return res.status(400).send({
                 status: "error",
                 data: {},
@@ -238,6 +233,13 @@ export const remove = async (req: Request, res: Response) => {
                 status: "error",
                 data: {},
                 message: "Review does not exist"
+            });
+        }
+        if (review.userId !== senderId) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "Not authorized to delete given message"
             });
         }
 
@@ -261,7 +263,12 @@ export const remove = async (req: Request, res: Response) => {
             });
         }
 
-        const newRating = Math.round((game._count.reviews * game.rating - review.rating) / (game._count.reviews - 1))
+        let newRating
+        if (game._count.reviews === 1) {
+            newRating = 0
+        } else {
+            newRating = Math.round((game._count.reviews * game.rating - review.rating) / (game._count.reviews - 1))
+        }
         const updatedGame = await prisma.game.update({
             where: {
                 id: review.gameId
@@ -307,11 +314,21 @@ export const update = async (req: Request, res: Response) => {
     try {
         const data = await updateReviewSchema.validate(req.body)
         const senderId = req.header('X-User')!
+
+        if (data.userId !== senderId) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "Not authorized to update given message"
+            });
+        }
+
         const user = await prisma.user.findUnique({
             where: {
                 id: data.userId
             }
         })
+
 
         if (!user) {
             return res.status(400).send({
@@ -332,6 +349,14 @@ export const update = async (req: Request, res: Response) => {
                 status: "error",
                 data: {},
                 message: "Review does not exist"
+            });
+        }
+
+        if (review.userId !== senderId) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "Not authorized to update given message"
             });
         }
 
@@ -371,14 +396,6 @@ export const update = async (req: Request, res: Response) => {
                     rating: newRating
                 }
             })
-        }
-
-        if (data.userId !== senderId) {
-            return res.status(403).send({
-                status: "error",
-                data: {},
-                message: "Not authorized to delete given message"
-            });
         }
 
         const updatedReview = await prisma.review.update({

@@ -4,9 +4,6 @@ import cors from 'cors'
 
 const api = express()
 
-/**
- * Make express parse JSON in body and parse url encoded strings
- */
 api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
 

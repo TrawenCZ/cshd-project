@@ -6,27 +6,27 @@ import prisma from '../client';
 export const list = async (req: Request, res: Response) => {
     try {
         const page = +(req.query.page || 0)
-        const { user, game } = req.body
+        const { userId, gameId } = req.body
         let reviews
 
-        if (user && game) {
+        if (userId && gameId) {
             return res.status(400).send({
                 status: "error",
                 data: {},
                 message: "Request body must contain only userID or only gameID"
             });
-        } else if (user) {
+        } else if (userId) {
             reviews = await prisma.review.findMany({
                 where: {
-                    userId: user
+                    userId: userId
                 },
                 skip: page * 10,
                 take: 10
             })
-        } else if (game) {
+        } else if (gameId) {
             reviews = await prisma.review.findMany({
                 where: {
-                    gameId: game
+                    gameId: gameId
                 },
                 skip: page * 10,
                 take: 10
@@ -38,7 +38,6 @@ export const list = async (req: Request, res: Response) => {
                 message: "There must be a request body containing userID or gameID"
             });
         }
-
 
         return res.send({
             status: "success",

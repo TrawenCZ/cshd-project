@@ -74,7 +74,7 @@ const userSchema = object({
     username: string().required(),
     password: string().required(),
     aboutMe: string().default(""),
-    profilePicture: string().optional()
+    profilePicture: string().default("https://www.rockandpop.eu/wp-content/plugins/buddyboss-platform/bp-core/images/profile-avatar-buddyboss.png")
 });
 
 export const store = async (req: Request, res: Response) => {
@@ -175,6 +175,82 @@ export const login = async (req: Request, res: Response) => {
                 message: e.message
             });
         }
+        return res.status(500).send({
+            status: "error",
+            data: {},
+            message: "Something went wrong"
+        });
+    }
+}
+
+const userUpdateSchema = object({
+    username: string().optional(),
+    password: string().optional(),
+    aboutMe: string().optional(),
+    profilePicture: string().optional()
+});
+
+export const update = async (req: Request, res: Response) => {
+    try {
+        const data = await userUpdateSchema.validate(req.body);
+        if (data.password) {
+            data.password = new TextDecoder().decode(sha256(Buffer.from(data.password)))
+        }
+
+        const user = await prisma.user.findUnique({
+            where: {
+                id: req.params.id
+            }
+        })
+
+        if (!user) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "User not found"
+            })
+        }
+
+        if (data.username) {
+            const usernameExist = await prisma.user.findUnique({
+                where: {
+                    username: data.username
+                }
+            })
+            if (usernameExist) {
+                return res.status(400).send({
+                    status: "error",
+                    data: {},
+                    message: "Username already taken"
+                })
+            }
+        }
+
+
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: req.params.id
+            },
+            data: {
+                ...data,
+            },
+            select: {
+                id: true
+            }
+        })
+        return res.send({
+            status: "success",
+            data: updatedUser,
+        })
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            return res.status(400).send({
+                status: "error",
+                data: e.errors,
+                message: e.message
+            });
+        }
+
         return res.status(500).send({
             status: "error",
             data: {},

@@ -45,7 +45,11 @@ export const getOne = async (req: Request, res: Response) => {
                         game: {
                             select: {
                                 name: true,
-                                pictures: true,
+                                pictures: {
+                                    where: {
+                                        isMain: true,
+                                    }
+                                }
                             }
                         }
                     }

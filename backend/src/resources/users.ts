@@ -79,6 +79,7 @@ export const getOne = async (req: Request, res: Response) => {
 const userSchema = object({
     username: string().required(),
     password: string().required(),
+    passwordRepeat: string().required(),
     aboutMe: string().default(""),
     profilePicture: string().default("https://www.rockandpop.eu/wp-content/plugins/buddyboss-platform/bp-core/images/profile-avatar-buddyboss.png")
 });
@@ -86,7 +87,16 @@ const userSchema = object({
 export const store = async (req: Request, res: Response) => {
     try {
         const data = await userSchema.validate(req.body);
-        const password = new TextDecoder().decode(sha256(Buffer.from(data.password)))
+
+        if (data.password !== data.passwordRepeat) {
+            return res.status(400).send({
+                status: "error",
+                data: {},
+                message: "Passwords are not the same"
+            })
+        }
+
+        data.password = new TextDecoder().decode(sha256(Buffer.from(data.password)))
 
         const user = await prisma.user.findUnique({
             where: {
@@ -103,8 +113,7 @@ export const store = async (req: Request, res: Response) => {
 
         const newUser = await prisma.user.create({
             data: {
-                ...data,
-                password: password
+                ...data
             },
             select: {
                 id: true

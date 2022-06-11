@@ -1,0 +1,12 @@
+.logo {
+    float: left;
+    width: 75px;
+    height: 37px;
+    margin: 16px 24px 16px 0;
+}
+
+.menu-search {
+    float: right;
+    width: 304px;
+    height: 50px;
+}

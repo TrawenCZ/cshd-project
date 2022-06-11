@@ -1,4 +1,4 @@
-import {Request, Response} from 'express'
+import {Request, Response} from 'express';
 import prisma from '../client';
 import {array, object, string, ValidationError} from "yup";
 
@@ -27,7 +27,8 @@ export const list = async (req: Request, res: Response) => {
                     where: {
                         isMain: true
                     }
-                }
+                },
+                genres: true,
             },
             skip: page * 10,
             take: 10,

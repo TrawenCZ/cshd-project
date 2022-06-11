@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainPage from './MainPage';
 import '../App.css'
 import Profile from './Profile';
-import RegisterForm from './ReigsterForm';
+import RegisterForm from './RegisterForm';
 
 export const Pages = () => {
   return (

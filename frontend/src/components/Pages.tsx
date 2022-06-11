@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainPage from './MainPage';
 import '../App.css'
 import Profile from './Profile';
+import RegisterForm from './ReigsterForm';
 
 export const Pages = () => {
   return (
@@ -9,6 +10,7 @@ export const Pages = () => {
       <Routes>
         <Route path="/" element={<MainPage />}/>
         <Route path="/user/:id" element={<Profile />}/>
+        <Route path="/register" element={<RegisterForm />}/>
       </Routes>
     </BrowserRouter>
   );

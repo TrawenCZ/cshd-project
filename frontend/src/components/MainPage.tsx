@@ -24,7 +24,7 @@ function MainPage() {
   return (
     <>
     <Layout>
-      <LayoutHeader setGenres={setGenre}/>
+      <LayoutHeader setGenre={setGenre}/>
       <Content>
         <Row gutter={[5, 5]} style={{ alignItems: "center" }}
             justify="center">

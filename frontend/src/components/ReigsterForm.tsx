@@ -2,6 +2,7 @@ import { Alert, Button, Col, Form, Input, Row } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { Navigate } from "react-router-dom";
 
 enum ErrorRegister {
   USERNAME_EXISTS,
@@ -17,7 +18,7 @@ interface FormValues{
 
 const RegisterForm: React.FC = () => {
   const [error, setError] = useState<ErrorRegister>(ErrorRegister.NO_ERROR);
-
+  const [goHome, setToGoHome] = useState<boolean>(false);
   const onFinish = async (values: FormValues) => {
     if (values.password !== values.passwordRepeat) {
       setError(ErrorRegister.PASSWORDS_NOT_SAME);
@@ -31,9 +32,14 @@ const RegisterForm: React.FC = () => {
       password: values.password,
       passwordRepeat: values.passwordRepeat,
     }
-    await axios.post('http://localhost:4000/api/users', requestData, {headers}).catch(function(error){
-      console.log(error)
-  });
+    const req = await axios.post('http://localhost:4000/api/users', requestData, {headers})
+    if (req.status === 204) {
+      setError(ErrorRegister.PASSWORDS_NOT_SAME);
+    }else if(req.status === 205) {
+      setError(ErrorRegister.USERNAME_EXISTS);
+    }else{
+      setToGoHome(true);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -87,6 +93,7 @@ const RegisterForm: React.FC = () => {
         </Col>
         <Col span={8}/>
       </Row>
+      {goHome && (<Navigate to="/" replace={true} />)}
     </Content>
   );
 };

@@ -89,7 +89,7 @@ export const store = async (req: Request, res: Response) => {
         const data = await userSchema.validate(req.body);
 
         if (data.password !== data.passwordRepeat) {
-            return res.status(400).send({
+            return res.status(204).send({
                 status: "error",
                 data: {},
                 message: "Passwords are not the same"
@@ -104,7 +104,7 @@ export const store = async (req: Request, res: Response) => {
             }
         })
         if (user) {
-            return res.status(400).send({
+            return res.status(205).send({
                 status: "error",
                 data: {},
                 message: "Username already taken"

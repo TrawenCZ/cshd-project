@@ -1,4 +1,4 @@
-import {Request, Response} from 'express'
+import {Request, Response} from 'express';
 import prisma from '../client';
 import {array, object, string, ValidationError} from "yup";
 

@@ -7,7 +7,7 @@ enum ErrorRegister {
   USERNAME_EXISTS,
   PASSWORDS_NOT_SAME,
   NO_ERROR,
-  
+
 }
 interface FormValues{
   username:string,
@@ -17,7 +17,7 @@ interface FormValues{
 
 const RegisterForm: React.FC = () => {
   const [error, setError] = useState<ErrorRegister>(ErrorRegister.NO_ERROR);
-  
+
   const onFinish = async (values: FormValues) => {
     if (values.password !== values.passwordRepeat) {
       setError(ErrorRegister.PASSWORDS_NOT_SAME);
@@ -31,7 +31,7 @@ const RegisterForm: React.FC = () => {
       password: values.password,
       passwordRepeat: values.passwordRepeat,
     }
-    await axios.post('http://localhost:4000/api/users',requestData, {headers}).catch(function(error){
+    await axios.post('http://localhost:4000/api/users', requestData, {headers}).catch(function(error){
       console.log(error)
   });
   };

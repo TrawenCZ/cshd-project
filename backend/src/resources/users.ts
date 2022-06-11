@@ -111,14 +111,16 @@ export const store = async (req: Request, res: Response) => {
             })
         }
 
+        const {passwordRepeat, ...dataForCreate} = data
         const newUser = await prisma.user.create({
             data: {
-                ...data
+                ...dataForCreate
             },
             select: {
                 id: true
             }
         })
+
         return res.send({
             status: "success",
             data: newUser,

@@ -50,7 +50,7 @@ api.put('/api/reviews/:id', reviews.update)
 api.delete('/api/reviews/:id', reviews.remove)
 
 //api.get('/api/users', users.list)
-api.get('/api/login', users.login)
+api.post('/api/login', users.login)
 api.get('/api/users/:id', users.getOne)
 api.post('/api/users', users.store)
 api.put('/api/users/:id', users.update)

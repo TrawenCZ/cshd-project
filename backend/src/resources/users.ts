@@ -162,7 +162,7 @@ export const login = async (req: Request, res: Response) => {
         })
 
         if (!user) {
-            return res.status(400).send({
+            return res.status(206).send({
                 status: "error",
                 data: {},
                 message: "Invalid username"
@@ -171,7 +171,7 @@ export const login = async (req: Request, res: Response) => {
 
         const givenPasswordHash = new TextDecoder().decode(sha256(Buffer.from(data.password)))
         if (givenPasswordHash !== user.password) {
-            return res.status(400).send({
+            return res.status(207).send({
                 status: "error",
                 data: {},
                 message: "Invalid password"

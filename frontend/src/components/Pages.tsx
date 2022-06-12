@@ -3,6 +3,7 @@ import MainPage from './MainPage';
 import '../App.css'
 import Profile from './Profile';
 import RegisterForm from './RegisterForm';
+import LoginForm from './LoginForm';
 
 export const Pages = () => {
   return (
@@ -11,6 +12,7 @@ export const Pages = () => {
         <Route path="/" element={<MainPage />}/>
         <Route path="/user/:id" element={<Profile />}/>
         <Route path="/register" element={<RegisterForm />}/>
+        <Route path="/login" element={<LoginForm />}/>
       </Routes>
     </BrowserRouter>
   );

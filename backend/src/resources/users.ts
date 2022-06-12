@@ -177,6 +177,9 @@ export const login = async (req: Request, res: Response) => {
                 message: "Invalid password"
             });
         }
+
+        // @ts-ignore
+        req.session.userId = user.id
         return res.send({
             status: "success",
             data: {

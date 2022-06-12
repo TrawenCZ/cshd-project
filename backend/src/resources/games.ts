@@ -1,22 +1,51 @@
 import {Request, Response} from 'express';
 import prisma from '../client';
 import {array, object, string, ValidationError} from "yup";
+import {platforms} from "./index";
 
 
 const gameGetSchema = object({
     sortBy: string().default("rating"),
     orderType: string().default("desc"),
-    platforms: array().default([]),
-    gameModes: array().default([]),
+    platforms: array().default(undefined),
+    gameModes: array().default(undefined),
+    genres: array().default(undefined),
+    developers: array().default(undefined)
 });
 
 export const list = async (req: Request, res: Response) => {
     try {
         const page = +(req.query.page || 0)
-        const genreId = String(req.query.genre || '0')
+        const itemsPerPage = +(req.query.itemsPerPage || 10)
         const sortData = await gameGetSchema.validate(req.body)
 
         const games = await prisma.game.findMany({
+            where: {
+                platforms:  {
+                    some: {
+                        id: {
+                            in: sortData.platforms
+                        }
+                    }
+                },
+                gameModes: {
+                    some: {
+                        id: {
+                            in: sortData.gameModes
+                        }
+                    }
+                },
+                genres: {
+                    some: {
+                        id: {
+                            in: sortData.genres
+                        }
+                    }
+                },
+                developerId: {
+                    in: sortData.developers
+                }
+            },
             orderBy: {
                 [sortData.sortBy] : sortData.orderType
             },
@@ -28,25 +57,10 @@ export const list = async (req: Request, res: Response) => {
                     where: {
                         isMain: true
                     }
-                },
-                genres: {
-                    select: {
-                        id: true,
-                    }
                 }
             },
-            where: {
-                genres: {
-                    some: {
-                        id: {
-                            equals: genreId
-                        }
-                    }
-                }
-            },
-
-            skip: page * 10,
-            take: 10,
+            skip: page * itemsPerPage,
+            take: itemsPerPage,
         })
 
         return res.send({

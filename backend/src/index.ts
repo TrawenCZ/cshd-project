@@ -26,9 +26,9 @@ api.get('/api/', (req, res) => res.send({
   message: "Welcome to API for CSHD"
 }));
 
-api.get('/api/search', search)
+api.post('/api/search', search)
 
-api.get('/api/games', games.list)
+api.post('/api/games', games.list)
 api.get('/api/games/:id', games.getOne)
 
 api.get('/api/gameModes', gameModes.list)

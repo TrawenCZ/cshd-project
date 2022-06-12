@@ -22,6 +22,7 @@ function LayoutHeader({setGenre}: any) {
 
   function menuClick({ item, key, keyPath, selectedKeys, domEvent }: any){
     setGenre(key);
+    console.log(key);
   }
 
   return (
@@ -41,10 +42,6 @@ function LayoutHeader({setGenre}: any) {
                 children: [{key: 10, label: 'Last week'}, {key: 11, label: 'Last month'}, {key: 12, label: 'All time'}, ] 
             },
             { 
-                label: 'New and Noteworthy',
-                key: 1 
-            },
-            { 
                 label: 'Genres',
                 key: 2,
                 children: genreChildren
@@ -52,6 +49,8 @@ function LayoutHeader({setGenre}: any) {
             { 
                 label: 'User',
                 key: 3,
+                children: [{key: 30, label: 'Register'}, {key: 31, label: 'Login'}, ],
+                //children: [{key: 32, label: 'Logout'}, {key: 33, label: 'Profile page'}, ],
             },
             ]} ></Menu>
     </Header>

@@ -18,6 +18,7 @@ export const list = async (req: Request, res: Response) => {
         const page = +(req.query.page || 0)
         const itemsPerPage = +(req.query.itemsPerPage || 10)
         const sortData = await gameGetSchema.validate(req.body)
+        console.log(sortData)
 
         const games = await prisma.game.findMany({
             where: {

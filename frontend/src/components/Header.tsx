@@ -21,8 +21,8 @@ function LayoutHeader({setGenre}: any) {
   }
 
   function menuClick({ item, key, keyPath, selectedKeys, domEvent }: any){
-    setGenre(key);
-    console.log(key);
+    setGenre(selectedKeys);
+    console.log(selectedKeys)
   }
 
   return (
@@ -33,8 +33,8 @@ function LayoutHeader({setGenre}: any) {
             mode='horizontal'
             theme='dark'
             multiple={true}
-            defaultSelectedKeys={['1']}
-            onClick={menuClick}
+            onSelect={menuClick}
+            onDeselect={menuClick}
             items={[
             { 
                 label: 'Top Rated Games',

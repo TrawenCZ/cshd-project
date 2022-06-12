@@ -10,10 +10,12 @@ const { Search } = Input;
 const { Header, Footer, Sider, Content, } = Layout;
 
 function MainPage() {
-  const { data: gamesData, error: gamesError } = useSWR('http://localhost:4000/api/games', fetcher);
+  const [page, setPage] = useState(0);
+  const [genreId, setGenre] = useState('0');
+
+  const { data: gamesData, error: gamesError } = useSWR(`http://localhost:4000/api/games?page=${page}&genre=${genreId}`, fetcher);
   const { data: genresData, error: genresError } = useSWR('http://localhost:4000/api/genres', fetcher);
 
-  const [genreId, setGenre] = useState('21');
 
   if (gamesError || genresError) return <div>failed to load</div>;
   if (!gamesData || !genresData) return <div>loading...</div>;
@@ -29,8 +31,7 @@ function MainPage() {
         <Row gutter={[5, 5]} style={{ alignItems: "center" }}
             justify="center">
               {games.map((game: any) => {
-                if (game.genres.includes(genreId) || genreId == '21'){
-                  return (
+                return (
                   <Col>
                     <Card 
                       title={game.name}
@@ -43,7 +44,6 @@ function MainPage() {
 
                     </Card>
                   </Col>)
-                }
               })}
         </Row>
       </Content>

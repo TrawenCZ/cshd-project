@@ -13,6 +13,7 @@ const gameGetSchema = object({
 export const list = async (req: Request, res: Response) => {
     try {
         const page = +(req.query.page || 0)
+        const genreId = String(req.query.genre || '0')
         const sortData = await gameGetSchema.validate(req.body)
 
         const games = await prisma.game.findMany({
@@ -28,8 +29,22 @@ export const list = async (req: Request, res: Response) => {
                         isMain: true
                     }
                 },
-                genres: true,
+                genres: {
+                    select: {
+                        id: true,
+                    }
+                }
             },
+            where: {
+                genres: {
+                    some: {
+                        id: {
+                            equals: genreId
+                        }
+                    }
+                }
+            },
+
             skip: page * 10,
             take: 10,
         })

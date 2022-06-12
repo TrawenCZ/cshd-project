@@ -86,6 +86,14 @@ export const getOne = async (req: Request, res: Response) => {
                         officialPage: true
                     }
                 },
+                pictures: {
+                    select: {
+                        id: true,
+                        source: true,
+                        alt: true,
+                        isMain: true
+                    }
+                },
             }
         })
 

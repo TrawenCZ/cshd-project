@@ -28,7 +28,7 @@ export interface GameProps{
   gameModes: string[],
   genres: GenreProps[],
   developer: DeveloperProps,
-  developerId: string,
+  developerId: string,  
   platforms: PlatformProps[],
   reviews: ReviewProps[]
 };
@@ -125,17 +125,19 @@ function Game() {
              {/* TODO Your Review - idk what the getter is */}
           </Row>
           <Row>
-            {/* TODO Fix backend for this, then uncomment it*/}
-            {/* {game.reviews.map((review => {
+            
+            {game.reviews.map((review => {
               return(
                 <Row>
                   <Col>
                     <Row>
-                      <p>{review.user.username}</p>
+                      {/* TODO Fix backend for this, then uncomment it*/}
+                      {/* <p>{review.user.username}</p> it*/}
                     </Row>
                     <Row>
                       <div>
-                        <Image src={review.user.profilePicture}/>
+                        {/* TODO Fix backend for this, then uncomment it*/}
+                        {/* <Image src={review.user.profilePicture}/> */}
                       </div>
                     </Row>
                   </Col>
@@ -152,7 +154,7 @@ function Game() {
                   </Col>
                 </Row>
                 )
-              }))} */}
+              }))}
           </Row>
         </Col>
         <Col span={5}>

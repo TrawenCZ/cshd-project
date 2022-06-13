@@ -92,6 +92,15 @@ const newReviewSchema = object({
 export const store = async (req: Request, res: Response) => {
     try {
         const data = await newReviewSchema.validate(req.body);
+
+        if (req.session.userId !== data.userId) {
+            return res.status(403).send({
+                status: "error",
+                data: {},
+                message: "Not authorized to create review with this userID"
+            });
+        }
+
         if (data.rating > 100 || data.rating < 0) {
             return res.status(400).send({
                 status: "error",
@@ -199,8 +208,9 @@ const removeReviewSchema = object({
 export const remove = async (req: Request, res: Response) => {
     try {
         const data = await removeReviewSchema.validate(req.body)
-        const senderId = req.header('X-User')!
-        if (data.userId !== senderId) {
+        //const senderId = req.header('X-User')!
+
+        if (data.userId !== req.session.userId) {
             return res.status(403).send({
                 status: "error",
                 data: {},
@@ -234,7 +244,7 @@ export const remove = async (req: Request, res: Response) => {
                 message: "Review does not exist"
             });
         }
-        if (review.userId !== senderId) {
+        if (review.userId !== data.userId) {
             return res.status(403).send({
                 status: "error",
                 data: {},
@@ -268,7 +278,7 @@ export const remove = async (req: Request, res: Response) => {
         } else {
             newRating = Math.round((game._count.reviews * game.rating - review.rating) / (game._count.reviews - 1))
         }
-        const updatedGame = await prisma.game.update({
+        await prisma.game.update({
             where: {
                 id: review.gameId
             },
@@ -312,9 +322,9 @@ const updateReviewSchema = object({
 export const update = async (req: Request, res: Response) => {
     try {
         const data = await updateReviewSchema.validate(req.body)
-        const senderId = req.header('X-User')!
+        //const senderId = req.header('X-User')!
 
-        if (data.userId !== senderId) {
+        if (data.userId !== req.session.userId) {
             return res.status(403).send({
                 status: "error",
                 data: {},
@@ -351,7 +361,7 @@ export const update = async (req: Request, res: Response) => {
             });
         }
 
-        if (review.userId !== senderId) {
+        if (review.userId !== data.userId) {
             return res.status(403).send({
                 status: "error",
                 data: {},
@@ -387,7 +397,7 @@ export const update = async (req: Request, res: Response) => {
                 });
             }
             const newRating = Math.round((game._count.reviews * game.rating - review.rating + data.rating) / (game._count.reviews))
-            const updatedGame = await prisma.game.update({
+            await prisma.game.update({
                 where: {
                     id: review.gameId
                 },

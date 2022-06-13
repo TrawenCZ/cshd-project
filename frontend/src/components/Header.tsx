@@ -18,12 +18,14 @@ function LayoutHeader({setGenre}: any) {
   const { data, error } = useSWR('http://localhost:4000/api/genres', fetcher)
   const valKey = [[[30, 31],["Register","Login"]],[[32, 33],["Logout","Profile page"]]]
   const [decider, setDecider] = useState(0)
-  const [userId, setUserId] = useState<string>();
+  const [userId, setUserId] = useState(undefined)
 
   useEffect(() => {
     axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true}).then(response => {
     console.log(response.data.data.userId)
     setDecider(response.data.data.userId !== undefined ? 1 : 0)
+    setUserId(response.data.data.userId)
+    console.log(userId)
   })
   }, [decider]);
 
@@ -43,32 +45,26 @@ function LayoutHeader({setGenre}: any) {
   }
 
   function menuClick({ item, key, keyPath, selectedKeys, domEvent }: any){
-    if (selectedKeys.includes('21')){
-      setGenre(undefined);
+    if (genreChildren.map(genre => genre.key).includes(key)){
+      if (selectedKeys.includes('21')){
+        setGenre(undefined);
+      }
+      else {
+        setGenre(selectedKeys);
+      }
     }
-    else {
-      setGenre(selectedKeys);
-    }
+    
     if (key == "31"){
       navigate('login')
     }
     if (key === "33") {
-      console.log((async () => (await axios.get('http://localhost:4000/api/loggedUser')).data.userId))
-      return( <Navigate to={`/profile/${async ()=>{
-        console.log(decider)
-        if (decider === 1) { // CHECK
-          console.log("WOOO")
-          return (await axios.get('http://localhost:4000/api/loggedUser')).data.userId
-        }
-      }}`}/>)
+      navigate(`user/${userId}`)
     } else if(key === "32") {
       setDecider(0)
-      console.log(decider);
       console.log(axios.delete("http://localhost:4000/api/logout", {
         headers: headers,
         withCredentials: true
       }))
-      console.log(decider);
     }
   }
 

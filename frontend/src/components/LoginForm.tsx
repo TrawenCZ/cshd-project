@@ -32,8 +32,6 @@ const LoginForm: React.FC = () => {
     }else if(req.status === 207) {
       setError(ErrorRegister.WRONG_PASSWORD);
     }else{
-        const userid = req.data.data.id
-        // PLS SAVE USERID GLOBALNĚ 
         setToGoHome(true);
     }
   };

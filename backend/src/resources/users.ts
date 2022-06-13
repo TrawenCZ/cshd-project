@@ -149,6 +149,13 @@ const loginSchema = object({
 
 export const login = async (req: Request, res: Response) => {
     try {
+        if (req.session.userId) {
+            return res.status(206).send({
+                status: "error",
+                data: {},
+                message: "Already logged in"
+            });
+        }
         const data = await loginSchema.validate(req.body)
 
         const user = await prisma.user.findUnique({
@@ -177,6 +184,8 @@ export const login = async (req: Request, res: Response) => {
                 message: "Invalid password"
             });
         }
+
+        req.session.userId = user.id
 
         return res.send({
             status: "success",
@@ -211,8 +220,9 @@ const userUpdateSchema = object({
 export const update = async (req: Request, res: Response) => {
     try {
         const data = await userUpdateSchema.validate(req.body)
-        const senderId = req.header('X-User')!
-        if (req.params.id !== senderId) {
+        //const senderId = req.header('X-User')!
+
+        if (req.params.id !== req.session.userId) {
             return res.status(403).send({
                 status: "error",
                 data: {},
@@ -284,4 +294,42 @@ export const update = async (req: Request, res: Response) => {
             message: "Something went wrong"
         });
     }
+}
+
+export const logout = (req: Request, res: Response) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send({
+                status: "error",
+                data: {},
+                message: "Something went wrong"
+            });
+        }
+        res.clearCookie("test")
+        return res.send({
+            status: "success",
+            data: {},
+            message: "Successfully logged out"
+        })
+    })
+}
+
+export const loggedUser = (req: Request, res: Response) => {
+    return res.send({
+        status: "success",
+        data: {
+            userId: req.session.userId
+        }
+    })
+}
+
+export const checkLogin = (req: Request, res: Response, next: Function) => {
+    if (!req.session.userId) {
+        return res.status(222).send({
+            status: "error",
+            data: {},
+            message: "Not logged in"
+        });
+    }
+    next()
 }

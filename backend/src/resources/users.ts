@@ -325,7 +325,7 @@ export const loggedUser = (req: Request, res: Response) => {
 
 export const checkLogin = (req: Request, res: Response, next: Function) => {
     if (!req.session.userId) {
-        return res.status(403).send({
+        return res.status(222).send({
             status: "error",
             data: {},
             message: "Not logged in"

@@ -10,14 +10,23 @@ const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
 
 function LayoutHeader({setGenre}: any) {
+  const headers = {
+    "Content-Type": "application/json",
+  }
   const { data, error } = useSWR('http://localhost:4000/api/genres', fetcher)
   const valKey = [[[30, 31],["Register","Login"]],[[32, 33],["Logout","Profile page"]]]
   const [decider, setDecider] = useState(0)
+  const [userId, setUserId] = useState<string>();
+  const req = axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
+  req.then(response => {
+    setUserId(response.data.data.userId)
+  })
 
-  axios.get('http://localhost:4000/api/loggedUser').then((response) => {
-      setDecider(response.data.status === 'error' ? 0 : 1)
-  });
-
+  //console.log(temp)
+  //const blbost = req()
+  //console.log(test().then())
+  //setDecider(n.data === 'error' ? 0 : 1)
+  //console.log(data)
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
@@ -91,3 +100,12 @@ export async function isLoggedIn(){
   console.log('test');
   return x !== 'error'
 }
+
+const test = async () => {
+  const headers = {
+    "Content-Type": "application/json",
+  }
+
+  const output = await axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
+  return (output.data.userId)
+} 

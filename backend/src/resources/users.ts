@@ -184,8 +184,9 @@ export const login = async (req: Request, res: Response) => {
                 message: "Invalid password"
             });
         }
-
+        console.log("LOOL")
         req.session.userId = user.id
+        console.log(req.session.userId)
 
         return res.send({
             status: "success",
@@ -325,7 +326,7 @@ export const loggedUser = (req: Request, res: Response) => {
 
 export const checkLogin = (req: Request, res: Response, next: Function) => {
     if (!req.session.userId) {
-        return res.status(222).send({
+        return res.status(221).send({
             status: "error",
             data: {},
             message: "Not logged in"

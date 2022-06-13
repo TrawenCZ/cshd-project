@@ -34,7 +34,12 @@ api.use(session({
 /**
   * CORS
   */
-api.use(cors());
+api.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+  credentials: true
+}));
+
 
 /**
  * Serve static content from public directory for images

@@ -26,13 +26,16 @@ const LoginForm: React.FC = () => {
       username: values.username,
       password: values.password,
     }
-    const req = await axios.post('http://localhost:4000/api/login', requestData, {headers})
+    
+    const req = await axios.post('http://localhost:4000/api/login', requestData , {headers, withCredentials: true})
+    console.log(req)
     if (req.status === 206) {
       setError(ErrorRegister.USERNAME_NULL);
     }else if(req.status === 207) {
       setError(ErrorRegister.WRONG_PASSWORD);
     }else{
-        setToGoHome(true);
+      console.log(await axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true}))
+      setToGoHome(true);
     }
   };
 

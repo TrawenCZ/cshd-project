@@ -25,6 +25,7 @@ function MainPage() {
       console.log(games)
     });
   }, [genres]);
+  const [userId, setUserId] = useState(undefined)
 
   return (
     <>

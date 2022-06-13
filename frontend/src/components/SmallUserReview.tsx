@@ -18,19 +18,28 @@ export interface SmallUserReviewProps {
 
 export function SmallUserReview({id, header, rating, description, game}: SmallUserReviewProps) {
   return (
-     <Row>
-      <Col span={1}/>
+    <>
+    <Row>
+      <Col span={2}/>
       <Col span={3}>
-        <p>{game.name}</p>
-        <img src={game.pictures[0].source} alt={game.pictures[0].alt} />
+        <h4 style={{textAlign:'center'}}>{game.name}</h4>
       </Col>
-      <Col span={16}>
-        <p>{header}</p>
+      <Col span={18}/>
+    </Row>
+    <Row>
+      <Col span={2}/>
+      <Col span={3}>
+        <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%"}} src={game.pictures[0].source} alt={game.pictures[0].alt} />
+      </Col>
+      <Col span={1}/>
+      <Col span={12}>
+        <h1>{header}</h1>
         <p>{description}</p>
       </Col>
-      <Col span={3}><h2>{rating} %</h2></Col>
-      <Col span={1}/>
+      <Col span={3} style={{lineHeight:"100%"}}><h1 style={{textAlign:"center"}}>{rating} %</h1></Col>
+      <Col span={2}/>
     </Row>
+    </>
   );
 };
 

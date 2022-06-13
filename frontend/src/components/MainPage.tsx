@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import fetcher from '../models/fetcher';
-import { useState } from 'react';
+import axios from "axios";
+import { useState, useEffect } from 'react';
 import { Layout, Card, Row, Col, Input } from 'antd'
 import { Link } from 'react-router-dom';
 import LayoutHeader from './Header';
@@ -10,27 +11,31 @@ const { Search } = Input;
 const { Header, Footer, Sider, Content, } = Layout;
 
 function MainPage() {
-  const { data: gamesData, error: gamesError } = useSWR('http://localhost:4000/api/games', fetcher);
-  const { data: genresData, error: genresError } = useSWR('http://localhost:4000/api/genres', fetcher);
+  const [page, setPage] = useState(0);
+  const [genres, setGenres] = useState(undefined);
+  const [games, setGames] = useState([]);
 
-  const [genreId, setGenre] = useState('21');
-
-  if (gamesError || genresError) return <div>failed to load</div>;
-  if (!gamesData || !genresData) return <div>loading...</div>;
-
-  const games: any = gamesData.data;
-  const rows = new Array(Math.ceil(games.length / 3))
+  useEffect(() => {
+    axios.post(`http://localhost:4000/api/games?page=${page}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      genres: genres,
+    }).then((response) => {
+      setGames(response.data.data)
+      console.log(games)
+    });
+  }, [genres]);
 
   return (
     <>
     <Layout>
-      <LayoutHeader setGenres={setGenre}/>
+      <LayoutHeader setGenre={setGenres}/>
       <Content>
         <Row gutter={[5, 5]} style={{ alignItems: "center" }}
             justify="center">
               {games.map((game: any) => {
-                if (game.genres.includes(genreId) || genreId == '21'){
-                  return (
+                return (
                   <Col>
                     <Card 
                       title={game.name}
@@ -43,7 +48,6 @@ function MainPage() {
 
                     </Card>
                   </Col>)
-                }
               })}
         </Row>
       </Content>

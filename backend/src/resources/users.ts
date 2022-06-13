@@ -89,7 +89,7 @@ export const store = async (req: Request, res: Response) => {
         const data = await userSchema.validate(req.body);
 
         if (data.password !== data.passwordRepeat) {
-            return res.status(400).send({
+            return res.status(204).send({
                 status: "error",
                 data: {},
                 message: "Passwords are not the same"
@@ -104,21 +104,23 @@ export const store = async (req: Request, res: Response) => {
             }
         })
         if (user) {
-            return res.status(400).send({
+            return res.status(205).send({
                 status: "error",
                 data: {},
                 message: "Username already taken"
             })
         }
 
+        const {passwordRepeat, ...dataForCreate} = data
         const newUser = await prisma.user.create({
             data: {
-                ...data
+                ...dataForCreate
             },
             select: {
                 id: true
             }
         })
+
         return res.send({
             status: "success",
             data: newUser,
@@ -160,7 +162,7 @@ export const login = async (req: Request, res: Response) => {
         })
 
         if (!user) {
-            return res.status(400).send({
+            return res.status(206).send({
                 status: "error",
                 data: {},
                 message: "Invalid username"
@@ -169,12 +171,15 @@ export const login = async (req: Request, res: Response) => {
 
         const givenPasswordHash = new TextDecoder().decode(sha256(Buffer.from(data.password)))
         if (givenPasswordHash !== user.password) {
-            return res.status(400).send({
+            return res.status(207).send({
                 status: "error",
                 data: {},
                 message: "Invalid password"
             });
         }
+
+        // @ts-ignore
+        req.session.userId = user.id
         return res.send({
             status: "success",
             data: {

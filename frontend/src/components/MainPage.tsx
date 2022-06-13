@@ -1,8 +1,7 @@
-import useSWR from 'swr';
-import fetcher from '../models/fetcher';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import axios from "axios";
 import { useState, useEffect } from 'react';
-import { Layout, Card, Row, Col, Input } from 'antd'
+import { Layout, Card, Row, Col, Input, Button } from 'antd'
 import { Link } from 'react-router-dom';
 import LayoutHeader from './Header';
 import './MainPage.css'
@@ -32,6 +31,12 @@ function MainPage() {
     <Layout>
       <LayoutHeader setGenre={setGenres}/>
       <Content>
+        <div className='pagination'>
+          <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large" >
+          </Button>
+          <Button shape="circle" className='pageButton' icon={<RightOutlined />} size="large">
+          </Button>
+        </div>
         <Row gutter={[5, 5]} style={{ alignItems: "center" }}
             justify="center">
               {games.map((game: any) => {
@@ -50,6 +55,12 @@ function MainPage() {
                   </Col>)
               })}
         </Row>
+        <div className='pagination'>
+          <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large">
+          </Button>
+          <Button shape="circle" className='pageButton' icon={<RightOutlined />} size="large">
+          </Button>
+        </div>
       </Content>
       <Footer>Footer</Footer>
     </Layout>

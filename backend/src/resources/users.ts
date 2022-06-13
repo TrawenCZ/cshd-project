@@ -178,8 +178,6 @@ export const login = async (req: Request, res: Response) => {
             });
         }
 
-        // @ts-ignore
-        req.session.userId = user.id
         return res.send({
             status: "success",
             data: {

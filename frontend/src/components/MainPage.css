@@ -10,3 +10,17 @@
     width: 304px;
     height: 50px;
 }
+
+.pageButton {
+    margin: 12px 10px;
+    justify-content: center;
+    display: flex;
+    background: #001529;
+    border-color: #001529;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

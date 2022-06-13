@@ -3,6 +3,7 @@ import fetcher from '../models/fetcher';
 
 import { Layout, Menu, Input } from 'antd'
 import { Children } from 'react';
+import { Link } from 'react-router-dom';
 
 const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
@@ -21,14 +22,18 @@ function LayoutHeader({setGenre}: any) {
   }
 
   function menuClick({ item, key, keyPath, selectedKeys, domEvent }: any){
-    setGenre(selectedKeys);
-    console.log(selectedKeys)
+    if (selectedKeys.includes('21')){
+      setGenre(undefined);
+    }
+    else {
+      setGenre(selectedKeys);
+    }
+    
   }
 
   return (
     <Header>
-        <img src='logo.png' className='logo'></img>
-        <Search className='menu-search'></Search>
+        <Link to={'/'}><img src='logo.png' className='logo'></img></Link>
         <Menu
             mode='horizontal'
             theme='dark'

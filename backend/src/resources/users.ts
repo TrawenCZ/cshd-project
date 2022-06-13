@@ -305,7 +305,7 @@ export const logout = (req: Request, res: Response) => {
                 message: "Something went wrong"
             });
         }
-        res.clearCookie("test")
+        res.clearCookie(process.env.SESS_NAME || "dev")
         return res.send({
             status: "success",
             data: {},

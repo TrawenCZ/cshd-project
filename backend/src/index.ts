@@ -20,7 +20,7 @@ api.use(express.urlencoded({ extended: true }));
 const ONE_HOUR = 1000 * 60 * 60
 
 api.use(session({
-  name: "test",
+  name: process.env.SESS_NAME || "dev",
   resave: false,
   saveUninitialized: false,
   secret: "secret",

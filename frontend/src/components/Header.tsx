@@ -2,25 +2,27 @@ import useSWR from 'swr';
 import fetcher from '../models/fetcher';
 
 import { Layout, Menu, Input } from 'antd'
-import { Children } from 'react';
+import { Children, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
 
 function LayoutHeader({setGenre}: any) {
   const { data, error } = useSWR('http://localhost:4000/api/genres', fetcher)
+  const valKey = [[[30, 31],["Register","Login"]],[[32, 33],["Logout","Profile page"]]]
+  const [decider, setDecider] = useState(0)
+
+  axios.get('http://localhost:4000/api/loggedUser').then((response) => {
+      setDecider(response.data.status === 'error' ? 0 : 1)
+  });
 
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
   const genres: any = data.data;
   const genreChildren = new Array(genres.length + 1)
-  // USER LOGIN //
-  const valKey = [[[30, 31],["Register","Login"]],[[32, 33],["Logout","Profile page"]]]
-  const decider = (async () => await isLoggedIn()) ? 1 : 0
-  ///////////////
   genreChildren[0] = {key: '21', label: 'All genres'}
   for (let i = 0; i < genres.length; i++) {
     genreChildren[i+1] = {key: genres[i].id, label: genres[i].name}
@@ -43,10 +45,10 @@ function LayoutHeader({setGenre}: any) {
         }
       }}`}/>)
     } else if(key === "32") {
-      console.log("W");
-      const f = async () => {await axios.delete("http://localhost:4000/api/logout")} // ????
+      console.log(decider);
+      const f = async () => {console.log(await axios.delete("http://localhost:4000/api/logout"))} // ????
       f()
-
+      console.log(decider);
     }
   }
 
@@ -85,5 +87,7 @@ function LayoutHeader({setGenre}: any) {
 export default LayoutHeader;
 
 export async function isLoggedIn(){
-  return (await axios.get('http://localhost:4000/api/loggedUser')).status !== 222
+  const x = (await axios.get('http://localhost:4000/api/loggedUser')).data.status
+  console.log('test');
+  return x !== 'error'
 }

@@ -124,6 +124,16 @@ export const getOne = async (req: Request, res: Response) => {
                         isMain: true
                     }
                 },
+                reviews: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        gameId: true,
+                        header: true,
+                        rating: true,
+                        description: true
+                    }
+                },
             }
         })
 

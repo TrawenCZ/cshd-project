@@ -1,4 +1,5 @@
 import express from 'express'
+import session from 'express-session'
 import {games, gameModes, genres, developers, platforms, reviews, users, search} from './resources'
 import cors from 'cors'
 
@@ -6,6 +7,21 @@ const api = express()
 
 api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
+
+
+const ONE_HOUR = 1000 * 60 * 60
+
+api.use(session({
+  name: "test",
+  resave: false,
+  saveUninitialized: false,
+  secret: "secret",
+  cookie: {
+    maxAge: ONE_HOUR,
+    sameSite: true,
+    secure: process.env.NODE_ENV === "production"
+  }
+}))
 
 /**
   * CORS

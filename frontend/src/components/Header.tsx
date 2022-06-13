@@ -4,7 +4,7 @@ import fetcher from '../models/fetcher';
 import { Layout, Menu, Input } from 'antd'
 import { Children, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
@@ -13,20 +13,25 @@ function LayoutHeader({setGenre}: any) {
   const headers = {
     "Content-Type": "application/json",
   }
+
+  const navigate = useNavigate();
   const { data, error } = useSWR('http://localhost:4000/api/genres', fetcher)
   const valKey = [[[30, 31],["Register","Login"]],[[32, 33],["Logout","Profile page"]]]
   const [decider, setDecider] = useState(0)
   const [userId, setUserId] = useState<string>();
-  const req = axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
-  req.then(response => {
-    setUserId(response.data.data.userId)
-  })
 
-  //console.log(temp)
-  //const blbost = req()
-  //console.log(test().then())
-  //setDecider(n.data === 'error' ? 0 : 1)
-  //console.log(data)
+  useEffect(() => {
+    axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true}).then(response => {
+    console.log(response.data.data.userId)
+    setDecider(response.data.data.userId !== undefined ? 1 : 0)
+  })
+  }, [decider]);
+
+  // const req = axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
+  // req.then(response => {
+  //   setUserId(response.data.data.userId)
+  // })
+
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
@@ -44,6 +49,9 @@ function LayoutHeader({setGenre}: any) {
     else {
       setGenre(selectedKeys);
     }
+    if (key == "31"){
+      navigate('login')
+    }
     if (key === "33") {
       console.log((async () => (await axios.get('http://localhost:4000/api/loggedUser')).data.userId))
       return( <Navigate to={`/profile/${async ()=>{
@@ -54,9 +62,12 @@ function LayoutHeader({setGenre}: any) {
         }
       }}`}/>)
     } else if(key === "32") {
+      setDecider(0)
       console.log(decider);
-      const f = async () => {console.log(await axios.delete("http://localhost:4000/api/logout"))} // ????
-      f()
+      console.log(axios.delete("http://localhost:4000/api/logout", {
+        headers: headers,
+        withCredentials: true
+      }))
       console.log(decider);
     }
   }

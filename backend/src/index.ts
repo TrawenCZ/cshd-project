@@ -67,7 +67,7 @@ api.get('/api/developers/:id', developers.getOne)
 api.get('/api/platforms', platforms.list)
 api.get('/api/platforms/:id', platforms.getOne)
 
-api.post('/api/reviews', reviews.list)
+//api.get('/api/reviews', reviews.list)
 api.get('/api/reviews/:id', reviews.getOne)
 api.post('/api/reviews', checkLogin, reviews.store)
 api.put('/api/reviews/:id', checkLogin, reviews.update)

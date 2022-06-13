@@ -116,10 +116,30 @@ export const getOne = async (req: Request, res: Response) => {
                     }
                 },
                 pictures: {
+<<<<<<< HEAD
                     orderBy: {
                         isMain: "desc"
                     }
                 }
+=======
+                    select: {
+                        id: true,
+                        source: true,
+                        alt: true,
+                        isMain: true
+                    }
+                },
+                reviews: {
+                    select: {
+                        id: true,
+                        userId: true,
+                        gameId: true,
+                        header: true,
+                        rating: true,
+                        description: true
+                    }
+                },
+>>>>>>> da838c73b471fda85458b37af9132df866246ef6
             }
         })
 

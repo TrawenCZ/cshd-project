@@ -57,7 +57,6 @@ function Game() {
             <h1>{game.rating}</h1>
           </Row>
 
-          <Row justify="center">
             <Carousel>
             {game.pictures.map((picture => {
                 return(
@@ -67,7 +66,6 @@ function Game() {
                 )
               }))}
             </Carousel>
-          </Row>
           <Row justify="space-between">
             <Col>
               <Row>
@@ -124,20 +122,17 @@ function Game() {
           <Row>
              {/* TODO Your Review - idk what the getter is */}
           </Row>
-          <Row>
             
             {game.reviews.map((review => {
               return(
                 <Row>
                   <Col>
                     <Row>
-                      {/* TODO Fix backend for this, then uncomment it*/}
-                      {/* <p>{review.user.username}</p> it*/}
+                      <p>{review.user.username}</p>
                     </Row>
                     <Row>
                       <div>
-                        {/* TODO Fix backend for this, then uncomment it*/}
-                        {/* <Image src={review.user.profilePicture}/> */}
+                        <Image src={review.user.profilePicture}/>
                       </div>
                     </Row>
                   </Col>
@@ -155,11 +150,12 @@ function Game() {
                 </Row>
                 )
               }))}
-          </Row>
         </Col>
         <Col span={5}>
           <Row>
-             {/* TODO Main Image- idk what the getter is */}
+            <div>
+              <Image src={game.pictures[0].source}/>
+            </div>
           </Row>
           <Row>
             <p>{game.description}</p>
@@ -178,14 +174,6 @@ function Game() {
             </Col>
             <Col>
               <p>{game.developer.name}</p>
-            </Col>
-          </Row>
-          <Row justify="space-between">
-            <Col>
-              <h3>PUBLISHER</h3>
-            </Col>
-            <Col>
-              {/* TODO publisher isn't in backend yet */}
             </Col>
           </Row>
         </Col>

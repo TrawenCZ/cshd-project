@@ -1,8 +1,9 @@
-import { Alert, Button, Col, Form, Input, Row } from 'antd';
-import { Content } from 'antd/lib/layout/layout';
+import { Alert, Button, Col, Form, Input, Layout, Row } from 'antd';
+import { Content, Footer } from 'antd/lib/layout/layout';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Navigate } from "react-router-dom";
+import LayoutHeader from './Header';
 
 enum ErrorRegister {
   USERNAME_NULL,
@@ -43,46 +44,51 @@ const LoginForm: React.FC = () => {
     console.log('Failed:', errorInfo);
   };
   return (
-    <Content>
-      <Row><Col span={24}>{ErrorAlert(error)}</Col></Row>
-      <Row>
-      <Col span={8}/>
-      <Col span={8}>
-        <Form
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-          >
-            <Input />
-          </Form.Item>
+    <Layout>
+      <LayoutHeader/>
+        <Content>
+          <Row><Col span={24}>{ErrorAlert(error)}</Col></Row>
+          <Row><Col span={24} style={{height:"3em"}}></Col></Row>
+          <Row>
+          <Col span={8}/>
+          <Col span={8}>
+            <Form
+              name="basic"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              initialValues={{ remember: true }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item
+                label="Username"
+                name="username"
+                rules={[{ required: true, message: 'Please input your username!' }]}
+              >
+                <Input />
+              </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Login
-            </Button>
-          </Form.Item>
-        </Form>
-        </Col>
-        <Col span={8}/>
-      </Row>
-      {goHome && (<Navigate to="/" replace={true} />)}
-    </Content>
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: 'Please input your password!' }]}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                  Login
+                </Button>
+              </Form.Item>
+            </Form>
+            </Col>
+            <Col span={8}/>
+          </Row>
+          {goHome && (<Navigate to="/" replace={true} />)}
+        </Content>
+    <Footer>Footer</Footer>
+    </Layout>
   );
 };
 

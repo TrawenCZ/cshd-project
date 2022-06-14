@@ -55,10 +55,10 @@ function LayoutHeader({setGenre}: any) {
     }
     
     if (key == "31"){
-      navigate('login')
+      navigate('/login')
     }
     if (key === "33") {
-      navigate(`user/${userId}`)
+      navigate(`/user/${userId}`)
     } else if(key === "32") {
       setDecider(0)
       console.log(axios.delete("http://localhost:4000/api/logout", {

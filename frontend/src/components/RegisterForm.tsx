@@ -1,8 +1,9 @@
-import { Alert, Button, Col, Form, Input, Row } from 'antd';
-import { Content } from 'antd/lib/layout/layout';
+import { Alert, Button, Col, Form, Input, Layout, Row } from 'antd';
+import { Content, Footer } from 'antd/lib/layout/layout';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from "react-router-dom";
+import LayoutHeader from './Header';
 
 enum ErrorRegister {
   USERNAME_EXISTS,
@@ -45,7 +46,9 @@ const RegisterForm: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-  return (
+    return (
+    <Layout>
+      <LayoutHeader/>
     <Content>
       <Row><Col span={24}>{ErrorAlert(error)}</Col></Row>
       <Row>
@@ -95,6 +98,8 @@ const RegisterForm: React.FC = () => {
       </Row>
       {goHome && (<Navigate to="/" replace={true} />)}
     </Content>
+    <Footer>Footer</Footer>
+    </Layout>
   );
 };
 

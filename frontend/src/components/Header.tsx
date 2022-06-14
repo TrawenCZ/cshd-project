@@ -1,5 +1,6 @@
 import useSWR from 'swr';
 import fetcher from '../models/fetcher';
+import logo from '../logo.png'
 
 import { Layout, Menu, Input } from 'antd'
 import { Children, useEffect, useState } from 'react';
@@ -53,7 +54,7 @@ function LayoutHeader({setGenre}: any) {
         setGenre(selectedKeys);
       }
     }
-    
+
     if (key == "31"){
       navigate('/login')
     }
@@ -70,7 +71,7 @@ function LayoutHeader({setGenre}: any) {
 
   return (
     <Header>
-        <Link to={'/'}><img src='logo.png' className='logo'></img></Link>
+        <Link to={'/'}><img src={logo} className='logo' alt="CSHD Logo"></img></Link>
         <Menu
             mode='horizontal'
             theme='dark'
@@ -78,20 +79,20 @@ function LayoutHeader({setGenre}: any) {
             onSelect={menuClick}
             onDeselect={menuClick}
             items={[
-            { 
+            {
                 label: 'Top Rated Games',
                 key: 0,
-                children: [{key: 10, label: 'Last week'}, {key: 11, label: 'Last month'}, {key: 12, label: 'All time'}, ] 
+                children: [{key: 10, label: 'Last week'}, {key: 11, label: 'Last month'}, {key: 12, label: 'All time'}, ]
             },
-            { 
+            {
                 label: 'Genres',
                 key: 2,
                 children: genreChildren
             },
-            { 
+            {
                 label: 'User',
                 key: 3,
-              
+
                 children: [{key: valKey[decider][0][0], label: valKey[decider][1][0]}, {key: valKey[decider][0][1], label: valKey[decider][1][1]}, ],
                 //children: [{key: 32, label: 'Logout'}, {key: 33, label: 'Profile page'}, ],
             },
@@ -115,4 +116,4 @@ const test = async () => {
 
   const output = await axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
   return (output.data.userId)
-} 
+}

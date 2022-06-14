@@ -264,7 +264,7 @@ export const update = async (req: Request, res: Response) => {
             }
         }
 
-
+        console.log(data.aboutMe)
         const updatedUser = await prisma.user.update({
             where: {
                 id: req.params.id

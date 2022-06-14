@@ -10,7 +10,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
 
-function LayoutHeader({setGenre}: any) {
+function LayoutHeader({setGenre, setProfileId, setLoggedId}: any) {
   const headers = {
     "Content-Type": "application/json",
   }
@@ -23,10 +23,8 @@ function LayoutHeader({setGenre}: any) {
 
   useEffect(() => {
     axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true}).then(response => {
-    console.log(response.data.data.userId)
     setDecider(response.data.data.userId !== undefined ? 1 : 0)
     setUserId(response.data.data.userId)
-    console.log(userId)
   })
   }, [decider]);
 
@@ -60,12 +58,14 @@ function LayoutHeader({setGenre}: any) {
     }
     if (key === "33") {
       navigate(`/user/${userId}`)
+      setProfileId(userId)
     } else if(key === "32") {
       setDecider(0)
-      console.log(axios.delete("http://localhost:4000/api/logout", {
+      setLoggedId && setLoggedId('0')
+      axios.delete("http://localhost:4000/api/logout", {
         headers: headers,
         withCredentials: true
-      }))
+      })
     }
   }
 

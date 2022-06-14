@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Navigate } from "react-router-dom";
 import LayoutHeader from './Header';
+import {MainFooter} from "./MainFooter";
 
 enum ErrorRegister {
   USERNAME_EXISTS,
@@ -98,7 +99,7 @@ const RegisterForm: React.FC = () => {
       </Row>
       {goHome && (<Navigate to="/" replace={true} />)}
     </Content>
-    <Footer>Footer</Footer>
+    <MainFooter/>
     </Layout>
   );
 };

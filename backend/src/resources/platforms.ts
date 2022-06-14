@@ -34,6 +34,8 @@ export const getOne = async (req: Request, res: Response) => {
                     select: {
                         id: true,
                         name: true,
+                        description: true,
+                        rating:true,
                         pictures: {
                             where: {
                                 isMain: true

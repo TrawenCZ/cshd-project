@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Navigate } from "react-router-dom";
 import LayoutHeader from './Header';
+import {MainFooter} from "./MainFooter";
 
 enum ErrorRegister {
   USERNAME_NULL,
@@ -27,7 +28,7 @@ const LoginForm: React.FC = () => {
       username: values.username,
       password: values.password,
     }
-    
+
     const req = await axios.post('http://localhost:4000/api/login', requestData , {headers, withCredentials: true})
     console.log(req)
     if (req.status === 206) {
@@ -87,7 +88,7 @@ const LoginForm: React.FC = () => {
           </Row>
           {goHome && (<Navigate to="/" replace={true} />)}
         </Content>
-    <Footer>Footer</Footer>
+      <MainFooter/>
     </Layout>
   );
 };

@@ -9,6 +9,7 @@ import LayoutHeader from './Header';
 import { Footer } from 'antd/lib/layout/layout';
 import { useState, useRef } from 'react';
 import axios from 'axios';
+import MainFooter from "./MainFooter";
 
 const { Content } = Layout;
 
@@ -41,7 +42,7 @@ function Profile() {
       console.log(values.aboutMe)
       await axios.put(`http://localhost:4000/api/users/${id}`, {aboutMe: values.aboutMe},{headers, withCredentials: true})
     }
-   
+
   };
 
   const user: ProfileProps  = data.data;
@@ -69,7 +70,7 @@ function Profile() {
           <Col span={11}>
           <Form.Item name="aboutMe" style={{height:"100%",width:"100%"}}>
             <TextArea style={{width: "100%", height: "100%" ,resize: "none", fontSize:"1.3em", color:"black"}} defaultValue={user.aboutMe} disabled={!edit} />
-          </Form.Item>  
+          </Form.Item>
           </Col>
           <Col span={1}/>
         </Row>
@@ -83,7 +84,7 @@ function Profile() {
       </Row>
           {user.reviews.map((review, index) =>  (<div style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}}><SmallUserReview key={review.id} {...review}/></div>))}
       </Content>
-      <Footer>Footer</Footer>
+      <MainFooter/>
     </Layout>
     </>
   );

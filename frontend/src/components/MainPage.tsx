@@ -1,10 +1,11 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import axios from "axios";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Card, Row, Col, Input, Button } from 'antd'
 import { Link } from 'react-router-dom';
 import LayoutHeader from './Header';
 import './MainPage.css'
+import {MainFooter} from "./MainFooter";
 
 const { Search } = Input;
 const { Header, Footer, Sider, Content, } = Layout;
@@ -43,7 +44,7 @@ function MainPage() {
               {games.map((game: any) => {
                 return (
                   <Col>
-                    <Card 
+                    <Card
                       title={game.name}
                       bordered={true}
                       hoverable={true}
@@ -63,7 +64,7 @@ function MainPage() {
           </Button>
         </div>
       </Content>
-      <Footer>Footer</Footer>
+      <MainFooter/>
     </Layout>
     </>
   );

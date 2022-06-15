@@ -128,7 +128,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
                 label: 'Platforms',
                 key: 1,
                 children: platformChildren
-            }, 
+            },
             {
                 label: 'Genres',
                 key: 2,
@@ -142,7 +142,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
                 //children: [{key: 32, label: 'Logout'}, {key: 33, label: 'Profile page'}, ],
             },
             {
-              label: 
+              label:
                 <Dropdown overlay={menu}>
                   <a onClick={e => e.preventDefault()}>
                     <Space>
@@ -160,18 +160,3 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
 };
 
 export default LayoutHeader;
-
-export async function isLoggedIn(){
-  const x = (await axios.get('http://localhost:4000/api/loggedUser')).data.status
-  console.log('test');
-  return x !== 'error'
-}
-
-const test = async () => {
-  const headers = {
-    "Content-Type": "application/json",
-  }
-
-  const output = await axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
-  return (output.data.userId)
-}

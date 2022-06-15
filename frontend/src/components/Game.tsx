@@ -3,8 +3,9 @@ import {ReviewProps} from './Review'
 import {PlatformProps} from './Platform'
 import {GenreProps} from './Genre'
 import {DeveloperProps} from './Developer'
+import MainFooter from "./MainFooter";
 
-
+import { Link } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from '../models/fetcher';
 import { useState } from 'react';
@@ -12,7 +13,18 @@ import { format } from "date-fns";
 
 import TextArea from 'antd/lib/input/TextArea';
 import { useParams } from 'react-router-dom';
-import { Layout, Row, Col, Input, Carousel, Image, Tag, Button} from 'antd';
+import { Layout, Row, Col, Carousel, Image, Tag,
+  Form,
+  Input,
+  Button,
+  Radio,
+  Select,
+  Cascader,
+  DatePicker,
+  InputNumber,
+  TreeSelect,
+  Switch,
+  Checkbox,} from 'antd';
 import LayoutHeader from './Header';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -75,9 +87,11 @@ function Game() {
               {game.platforms.map((platform => {
               return(
                 <div>
-                  <Tag>
-                    {platform.name}
-                  </Tag>
+                  <Link to={`/platform/${platform.id}`}>
+                    <Tag>
+                      {platform.name}
+                    </Tag>
+                  </Link>
                 </div>
                 )
               }))}
@@ -91,9 +105,11 @@ function Game() {
               {game.genres.map((genre => {
               return(
                 <div>
-                  <Tag>
-                    {genre.name}
-                  </Tag>
+                  <Link to={`/genre/${genre.id}`}>
+                    <Tag>
+                      {genre.name}
+                    </Tag>
+                  </Link>
                 </div>
                 )
               }))}
@@ -104,39 +120,53 @@ function Game() {
             <Col>
               <h2>Reviews</h2>
             </Col>
-            <Col>
-              <Tag>Header</Tag>
-            </Col>
           </Row>
-          <Row>
-            <Input.TextArea />
-          </Row>
-          <Row justify="space-between">
-            <Col>
-              <Tag>0-100</Tag>
-            </Col>
-            <Col>
-              <Button type="primary">Add review</Button>
-            </Col>
-          </Row>
+
+            <Form
+              labelCol={{ span: 3 }}
+              wrapperCol={{ span: 100 }}
+              layout="horizontal"
+            >
+              <Form.Item label="Title">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Description">
+                <TextArea rows={6} />
+              </Form.Item>
+              <Form.Item label="Rating">
+                <InputNumber />
+                <Button style={{float: "right"}}>Submit review</Button>
+              </Form.Item>
+              </Form>
+
           <Row>
              {/* TODO Your Review - idk what the getter is */}
           </Row>
             
-            {game.reviews.map((review => {
+            {game.reviews.map(((review, index) => {
               return(
-                <Row>
+                
+                <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}> 
+                  <Row justify="start" gutter={[24, 24]}>
                   <Col>
                     <Row>
                       <p>{review.user.username}</p>
                     </Row>
                     <Row>
                       <div>
-                        <Image src={review.user.profilePicture}/>
+                        <Link to={`/user/${review.user.id}`}>
+                          <Image width={100} src={review.user.profilePicture} />
+                        </Link>
                       </div>
                     </Row>
+                    <Row justify="center" gutter={[24, 24]}>
+                      <Col>
+                        <p>{review.rating}%</p>
+                      </Col>
+                    </Row>
                   </Col>
-                  <Col>
+                  
+                  <Col flex="0.9">
                     <Row>
                       <p>{review.header}</p>
                     </Row>
@@ -144,9 +174,9 @@ function Game() {
                       <p>{review.description}</p>
                     </Row>
                   </Col>
-                  <Col>
-                    <p>{review.rating}%</p>
-                  </Col>
+                  </Row>
+                  
+                  
                 </Row>
                 )
               }))}
@@ -179,7 +209,9 @@ function Game() {
         </Col>
         </Row>
       </Content>
+      <MainFooter/>
     </Layout>
+
     </>
   );
 };
@@ -194,3 +226,4 @@ const contentStyle: React.CSSProperties = {
   textAlign: 'center',
   background: '#364d79',
 };
+

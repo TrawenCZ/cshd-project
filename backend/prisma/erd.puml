@@ -11,13 +11,15 @@ entity Game {
     * coverPicture : Text
     * officialPage: Text
     * rating: Number
-    releaseDate: Date
+    * releaseDate: Date
+
+
 }
 
 entity GameMode {
-    * id: <<autoincrement>>
+    * id : <<autoincrement>>
     ---
-    * name
+    * name : Text
 }
 
 entity Genre {
@@ -31,7 +33,7 @@ entity Developer {
     * id: <<autoincrement>>
     ---
     * name: Text
-    description: Text
+    * description: Text
 }
 
 entity Platform {
@@ -49,22 +51,29 @@ entity User {
     * password : Text
     * aboutMe : Text
     * isAdmin : Boolean
-    profilePicture : Text
+    * profilePicture : Text
 }
 
 entity Review {
     * id: <<autoincrement>>
     ---
     * header : Text
-    * starCount : Number
+    * rating : Number
     * description : Text
 }
-
+entity Image {
+    * id: <<autoincrement>>
+    ---
+    * source : Text
+    * alt : Text
+    * isMain: Boolean
+}
 Game }o..|| Developer
 Game }o..|{ Genre
 Game }o..|{ GameMode
 Game }o..|{ Platform
 Game ||..o{ Review
 User ||..o{ Review
+Game }o..|{ Image
 
 @enduml

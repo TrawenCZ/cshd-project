@@ -28,7 +28,8 @@ function MainPage() {
       },
       genres: genres,
       platforms: platforms,
-      ratingRange: ratingRange
+      ratingRange: ratingRange,
+      releaseRange: releaseRange
     }).then((response) => {
       console.log(response.data.data)
       setGames(response.data.data)
@@ -43,7 +44,8 @@ function MainPage() {
         },
         genres: genres,
         platforms: platforms,
-        ratingRange: ratingRange
+        ratingRange: ratingRange,
+        releaseRange: releaseRange
       }).then((response) => {
         if (response.data.data.length > 0){
           setPrevEnabled(true)
@@ -51,7 +53,7 @@ function MainPage() {
         else {
           setPrevEnabled(false)
         }
-        
+
       });
     }
     axios.post(`http://localhost:4000/api/games?page=${page+1}`, {
@@ -60,7 +62,8 @@ function MainPage() {
       },
       genres: genres,
       platforms: platforms,
-      ratingRange: ratingRange
+      ratingRange: ratingRange,
+      releaseRange: releaseRange
     }).then((response) => {
       if (response.data.data.length > 0){
         setNextEnabled(true);
@@ -69,7 +72,7 @@ function MainPage() {
         setNextEnabled(false);
       }
     });
-    
+
   }, [genres, platforms, page, ratingRange, releaseRange]);
 
   return (

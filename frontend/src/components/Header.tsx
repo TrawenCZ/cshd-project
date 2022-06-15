@@ -22,7 +22,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
           children: [
             {
               key: 'releaseSlider',
-              label: (<Slider range defaultValue={[1980, 2022]} min={1980} max={2022} onChange={(value) => setReleaseRange(value)}/>),
+              label: (<Slider range defaultValue={[1980, new Date().getFullYear()]} min={1980} max={new Date().getFullYear()} onChange={(value) => setReleaseRange(value)}/>),
             },
           ],
         },
@@ -97,6 +97,10 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
     if (key == "31"){
       navigate('/login')
     }
+    if (key == "30"){
+      navigate('/register')
+    }
+
     if (key === "33") {
       navigate(`/user/${userId}`)
       setProfileId(userId)

@@ -14,7 +14,7 @@ function MainPage() {
   const [page, setPage] = useState(0);
   const [genres, setGenres] = useState(undefined);
   const [platforms, setPlatforms] = useState(undefined);
-  const [releaseRange, setReleaseRange] = useState([1980, 2022]);
+  const [releaseRange, setReleaseRange] = useState([1980, new Date().getFullYear()]);
   const [ratingRange, setRatingRange] = useState([0, 100]);
   const [games, setGames] = useState([]);
   const [nextEnabled, setNextEnabled] = useState(false)

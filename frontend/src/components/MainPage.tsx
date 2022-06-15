@@ -13,31 +13,75 @@ const { Header, Footer, Sider, Content, } = Layout;
 function MainPage() {
   const [page, setPage] = useState(0);
   const [genres, setGenres] = useState(undefined);
+  const [platforms, setPlatforms] = useState(undefined);
+  const [releaseRange, setReleaseRange] = useState([1980, 2022]);
+  const [ratingRange, setRatingRange] = useState([0, 100]);
   const [games, setGames] = useState([]);
+  const [nextEnabled, setNextEnabled] = useState(false)
+  const [prevEnabled, setPrevEnabled] = useState(false)
+  // let prevEnabled = false;
+  // let nextEnabled = false;
 
   useEffect(() => {
+    console.log(ratingRange)
     axios.post(`http://localhost:4000/api/games?page=${page}`, {
       headers: {
         'Content-Type': 'application/json'
       },
       genres: genres,
+      platforms: platforms,
+      ratingRange: ratingRange
     }).then((response) => {
+      console.log(response.data.data)
       setGames(response.data.data)
-      console.log(games)
     });
-  }, [genres]);
-  const [userId, setUserId] = useState(undefined)
+    if (page === 0){
+      setPrevEnabled(false)
+    }
+    else if (page > 0){
+      axios.post(`http://localhost:4000/api/games?page=${page-1}`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        genres: genres,
+        platforms: platforms,
+        ratingRange: ratingRange
+      }).then((response) => {
+        if (response.data.data.length > 0){
+          setPrevEnabled(true)
+        }
+        else {
+          setPrevEnabled(false)
+        }
+        
+      });
+    }
+    axios.post(`http://localhost:4000/api/games?page=${page+1}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      genres: genres,
+      platforms: platforms,
+      ratingRange: ratingRange
+    }).then((response) => {
+      if (response.data.data.length > 0){
+        setNextEnabled(true);
+      }
+      else {
+        setNextEnabled(false);
+      }
+    });
+    
+  }, [genres, platforms, page, ratingRange, releaseRange]);
 
   return (
     <>
     <Layout>
-      <LayoutHeader setGenre={setGenres}/>
+      <LayoutHeader setGenre={setGenres} setPlatforms={setPlatforms} setReleaseRange={setReleaseRange} setRatingRange={setRatingRange}/>
       <Content>
         <div className='pagination'>
-          <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large" >
-          </Button>
-          <Button shape="circle" className='pageButton' icon={<RightOutlined />} size="large">
-          </Button>
+          {games.length > 0 && <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large" onClick={(event) => setPage(page-1)} disabled={!prevEnabled}/>}
+          {games.length > 0 && <Button shape="circle" className='pageButton' icon={<RightOutlined />} size="large" onClick={(event) => setPage(page+1)} disabled={!nextEnabled}/>}
         </div>
         <Row gutter={[5, 5]} style={{ alignItems: "center" }}
             justify="center">
@@ -58,10 +102,8 @@ function MainPage() {
               })}
         </Row>
         <div className='pagination'>
-          <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large">
-          </Button>
-          <Button shape="circle" className='pageButton' icon={<RightOutlined />} size="large">
-          </Button>
+          {games.length > 0 && <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large" onClick={(event) => setPage(page-1)} disabled={!prevEnabled}/>}
+          {games.length > 0 && <Button shape="circle" className='pageButton' icon={<RightOutlined />} size="large" onClick={(event) => setPage(page+1)} disabled={!nextEnabled}/>}
         </div>
       </Content>
       <MainFooter/>

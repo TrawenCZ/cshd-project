@@ -10,7 +10,9 @@ const gameGetSchema = object({
     platforms: array().default(undefined),
     gameModes: array().default(undefined),
     genres: array().default(undefined),
-    developers: array().default(undefined)
+    developers: array().default(undefined),
+    releaseRange: array().default([1980, 2022]),
+    ratingRange: array().default([0, 100]),
 });
 
 export const list = async (req: Request, res: Response) => {
@@ -21,6 +23,10 @@ export const list = async (req: Request, res: Response) => {
 
         const games = await prisma.game.findMany({
             where: {
+                rating: {
+                  gte: sortData.ratingRange[0],
+                  lte: sortData.ratingRange[1], 
+                },
                 platforms:  {
                     some: {
                         id: {

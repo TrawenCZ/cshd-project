@@ -2,21 +2,51 @@ import useSWR from 'swr';
 import fetcher from '../models/fetcher';
 import logo from '../logo.png'
 
-import { Layout, Menu, Input } from 'antd'
+import { Layout, Menu, Input, Dropdown, Space, Slider } from 'antd'
 import { Children, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { DownOutlined } from '@ant-design/icons';
 
 const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
 
-function LayoutHeader({setGenre, setProfileId, setLoggedId}: any) {
+function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRatingRange, setReleaseRange}: any) {
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: 'release',
+          type: 'group',
+          label: 'Release date',
+          children: [
+            {
+              key: 'releaseSlider',
+              label: (<Slider range defaultValue={[1980, 2022]} min={1980} max={2022} onChange={(value) => setReleaseRange(value)}/>),
+            },
+          ],
+        },
+        {
+          key: 'rating',
+          type: 'group',
+          label: 'Rating',
+          children: [
+            {
+              key: 'ratingSlider',
+              label: (<Slider range defaultValue={[0, 100]} min={0} max={100} onChange={(value) => setRatingRange(value)} />),
+            },
+          ],
+        },
+      ]}
+    />
+  );
   const headers = {
     "Content-Type": "application/json",
   }
 
   const navigate = useNavigate();
-  const { data, error } = useSWR('http://localhost:4000/api/genres', fetcher)
+  const { data: genreData, error: genreError } = useSWR('http://localhost:4000/api/genres', fetcher)
+  const { data: platformData, error: platformError } = useSWR('http://localhost:4000/api/platforms', fetcher)
   const valKey = [[[30, 31],["Register","Login"]],[[32, 33],["Logout","Profile page"]]]
   const [decider, setDecider] = useState(0)
   const [userId, setUserId] = useState(undefined)
@@ -28,19 +58,21 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId}: any) {
   })
   }, [decider]);
 
-  // const req = axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
-  // req.then(response => {
-  //   setUserId(response.data.data.userId)
-  // })
+  if (genreError || platformError) return <div>failed to load</div>;
+  if (!genreData || !platformData) return <div>loading...</div>;
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
-
-  const genres: any = data.data;
+  const genres: any = genreData.data;
   const genreChildren = new Array(genres.length + 1)
   genreChildren[0] = {key: '21', label: 'All genres'}
   for (let i = 0; i < genres.length; i++) {
     genreChildren[i+1] = {key: genres[i].id, label: genres[i].name}
+  }
+
+  const platforms: any = platformData.data;
+  const platformChildren = new Array(platforms.length + 1)
+  platformChildren[0] = {key: '11', label: 'All platforms'}
+  for (let i = 0; i < platforms.length; i++) {
+    platformChildren[i+1] = {key: platforms[i].id, label: platforms[i].name}
   }
 
   function menuClick({ item, key, keyPath, selectedKeys, domEvent }: any){
@@ -50,6 +82,15 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId}: any) {
       }
       else {
         setGenre(selectedKeys);
+      }
+    }
+
+    if (platformChildren.map(platform => platform.key).includes(key)){
+      if (selectedKeys.includes('11')){
+        setPlatforms(undefined);
+      }
+      else {
+        setPlatforms(selectedKeys);
       }
     }
 
@@ -80,10 +121,10 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId}: any) {
             onDeselect={menuClick}
             items={[
             {
-                label: 'Top Rated Games',
-                key: 0,
-                children: [{key: 10, label: 'Last week'}, {key: 11, label: 'Last month'}, {key: 12, label: 'All time'}, ]
-            },
+                label: 'Platforms',
+                key: 1,
+                children: platformChildren
+            }, 
             {
                 label: 'Genres',
                 key: 2,
@@ -96,7 +137,20 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId}: any) {
                 children: [{key: valKey[decider][0][0], label: valKey[decider][1][0]}, {key: valKey[decider][0][1], label: valKey[decider][1][1]}, ],
                 //children: [{key: 32, label: 'Logout'}, {key: 33, label: 'Profile page'}, ],
             },
-            ]} ></Menu>
+            {
+              label: 
+                <Dropdown overlay={menu}>
+                  <a onClick={e => e.preventDefault()}>
+                    <Space>
+                      Filters
+                      <DownOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>,
+              key: 4
+            }
+            ]} >
+        </Menu>
     </Header>
   );
 };

@@ -184,10 +184,8 @@ export const login = async (req: Request, res: Response) => {
                 message: "Invalid password"
             });
         }
-        console.log("LOOL")
-        req.session.userId = user.id
-        console.log(req.session.userId)
 
+        req.session.userId = user.id
         return res.send({
             status: "success",
             data: {
@@ -264,7 +262,6 @@ export const update = async (req: Request, res: Response) => {
             }
         }
 
-        console.log(data.aboutMe)
         const updatedUser = await prisma.user.update({
             where: {
                 id: req.params.id

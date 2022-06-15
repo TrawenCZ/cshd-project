@@ -65,8 +65,8 @@ function Game() {
         <Row justify="center" gutter={[24, 16]}>
         <Col span={11}>
           <Row justify="space-between">
-            <h1>{game.name}</h1>
-            <h1>{game.rating}</h1>
+            <h1 style={{color:"black", fontSize:"50px"}}>{game.name}</h1>
+            <h1 style={{color:"black", fontSize:"50px"}}>{game.rating}%</h1>
           </Row>
 
             <Carousel>
@@ -147,7 +147,7 @@ function Game() {
               return(
                 
                 <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}> 
-                  <Row justify="start" gutter={[24, 24]}>
+
                   <Col>
                     <Row>
                       <p>{review.user.username}</p>
@@ -166,7 +166,7 @@ function Game() {
                     </Row>
                   </Col>
                   
-                  <Col flex="0.9">
+                  <Col flex="1">
                     <Row>
                       <p>{review.header}</p>
                     </Row>
@@ -174,7 +174,7 @@ function Game() {
                       <p>{review.description}</p>
                     </Row>
                   </Col>
-                  </Row>
+
                   
                   
                 </Row>

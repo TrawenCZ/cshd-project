@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd'
+import { Link } from 'react-router-dom';
 import { GameProps } from './Game';
 
 
@@ -15,7 +16,9 @@ export function SmallGameCard(game: GameProps) {
             <Row>
             <Col span={3}/>
             <Col span={3}>
-                <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%"}} src={game.pictures[0].source} alt={game.pictures[0].alt} />
+                <Link to={`/game/${game.id}`}>
+                    <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%"}} src={game.pictures[0].source} alt={game.pictures[0].alt} />
+                </Link>
             </Col>
             <Col span={1}/>
             <Col span={12}>

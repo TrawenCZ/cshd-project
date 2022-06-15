@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import fetcher from '../models/fetcher';
 
-import { Button, Col, Form, Layout, Row } from 'antd'
+import { Button, Col, Form, Input, Layout, Row } from 'antd'
 import TextArea from 'antd/lib/input/TextArea';
 import { useParams } from 'react-router-dom';
 import {SmallUserReview} from './SmallUserReview'
@@ -26,15 +26,16 @@ interface IFormValue{
   aboutMe: string
 }
 function Profile() {
-  const headers = {
-    "Content-Type": "application/json",
-  }
 
   const [edit, setEdit] = useState<boolean>(false)
   const [editAllowed, setEditAllowed] = useState(false)
   const { id } = useParams()
   const [profileId, setProfileId] = useState(id)
   const [loggedId, setLoggedId] = useState(undefined)
+  
+  const headers = {
+    "Content-Type": "application/json",
+  }
 
   useEffect(() => {
     axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true}).then(response => {
@@ -54,6 +55,7 @@ function Profile() {
   if (!data) return <div>loading...</div>;
 
   const onFinish = async (values: IFormValue) => {
+    console.log(values.aboutMe)
     const headers = {
       "Content-Type": "application/json",
     }
@@ -70,39 +72,39 @@ function Profile() {
     <Layout>
       <LayoutHeader setProfileId={setProfileId} setLoggedId={setLoggedId}/>
       <Content>
+      <Form onFinish={onFinish} style={{margin:"0"}}>
       <Row style={{height:"3em", backgroundColor:"#030d16"}}>
         <Col span={24}/>
       </Row>
-      <Form onFinish={onFinish}>
-        <Row style={{backgroundColor:"#030d16"}}>
-          <Col span={4}/>
-          <Col span={3}>
-            <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%", borderRadius: "50%"}} src={user.profilePicture} alt="User's personal icon"/>
-          </Col>
-          <Col span={1}>
-          </Col>
-          <Col span={4}>
-            <Form.Item style={{background: "#722ed1",position:"absolute",right:"0",bottom:"0"}}>
-              {
-                profileId === loggedId && <Button htmlType="submit" type="primary" icon={(edit) ? <UnlockOutlined />:<LockOutlined />}>edit</Button>
-              }
-            </Form.Item>
-          </Col>
-          <Col span={11}>
-          <Form.Item name="aboutMe" style={{height:"100%",width:"100%"}} initialValue={user.aboutMe}>
-            <TextArea style={{width: "100%", height: "100%" ,resize: "none", fontSize:"1.3em", color:"black"}} disabled={!edit || profileId !== loggedId} />
-          </Form.Item>  
-          </Col>
-          <Col span={1}/>
-        </Row>
-        </Form>
+      <Row style={{backgroundColor:"#030d16", margin:"0"}}>
+        <Col span={4}/>
+        <Col span={3}>
+          <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%", borderRadius: "50%"}} src={user.profilePicture} alt="User's personal icon"/>
+        </Col>
+        <Col span={4}/>
+        <Col span={11} style={{margin:"0"}}>
+          <Form.Item name="aboutMe" style={{margin:"0"}} initialValue={user.aboutMe}>
+            <TextArea style={{resize: "none",height:"100%", fontSize:"1.3em", color:"black", margin:"0"}} disabled={!edit || profileId !== loggedId} />
+          </Form.Item>
+        </Col>
+        <Col span={2}/>
+      </Row>
       <Row style={{height:"3em", backgroundColor:"#030d16" }}>
         <Col span={4}/>
         <Col span={3}>
             <h1 style={{textAlign:"center", color:"white"}}>{user.username}</h1>
         </Col>
-        <Col span={15}/>
+        <Col span={4}/>
+        <Col span={11}>
+          <Form.Item style={{margin:"0", float:"left"}}>
+          {
+            profileId === loggedId && <Button htmlType="submit" type="primary" icon={(edit) ? <UnlockOutlined />:<LockOutlined />}>EDIT ABOUT ME</Button>
+          }
+          </Form.Item>
+        </Col>
+        <Col span={6}/>
       </Row>
+      </Form>
           {user.reviews.map((review, index) =>  (<div style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}}><SmallUserReview key={review.id} {...review}/></div>))}
       </Content>
       <MainFooter/>

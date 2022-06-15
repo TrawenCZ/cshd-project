@@ -31,6 +31,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 
 export interface GameProps{
+  id:string,
   name:string,
   pictures:ImageProps[],
   description: string,

@@ -19,8 +19,6 @@ function MainPage() {
   const [games, setGames] = useState([]);
   const [nextEnabled, setNextEnabled] = useState(false)
   const [prevEnabled, setPrevEnabled] = useState(false)
-  // let prevEnabled = false;
-  // let nextEnabled = false;
 
   useEffect(() => {
     console.log(ratingRange)

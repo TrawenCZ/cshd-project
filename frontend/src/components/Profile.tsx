@@ -6,10 +6,10 @@ import TextArea from 'antd/lib/input/TextArea';
 import { useParams } from 'react-router-dom';
 import {SmallUserReview} from './SmallUserReview'
 import LayoutHeader from './Header';
-import { Footer } from 'antd/lib/layout/layout';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import MainFooter from "./MainFooter";
+import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 
@@ -29,6 +29,7 @@ function Profile() {
   const headers = {
     "Content-Type": "application/json",
   }
+
   const [edit, setEdit] = useState<boolean>(false)
   const [editAllowed, setEditAllowed] = useState(false)
   const { id } = useParams()
@@ -45,7 +46,7 @@ function Profile() {
       setEditAllowed(false)
     }
   })
-  }, [profileId, loggedId]);
+  }, [profileId, loggedId, headers, id]);
 
   const { data, error } = useSWR(`http://localhost:4000/api/users/${id}`, fetcher);
 
@@ -58,7 +59,6 @@ function Profile() {
     }
     setEdit(!edit)
     if(edit) {
-      console.log(values.aboutMe)
       await axios.put(`http://localhost:4000/api/users/${id}`, {aboutMe: values.aboutMe},{headers, withCredentials: true})
     }
 
@@ -84,13 +84,13 @@ function Profile() {
           <Col span={4}>
             <Form.Item style={{background: "#722ed1",position:"absolute",right:"0",bottom:"0"}}>
               {
-                profileId === loggedId && <Button htmlType="submit" type="primary" >Edit profile</Button>
+                profileId === loggedId && <Button htmlType="submit" type="primary" icon={(edit) ? <UnlockOutlined />:<LockOutlined />}>edit</Button>
               }
             </Form.Item>
           </Col>
           <Col span={11}>
-          <Form.Item name="aboutMe" style={{height:"100%",width:"100%"}}>
-            <TextArea style={{width: "100%", height: "100%" ,resize: "none", fontSize:"1.3em", color:"black"}} defaultValue={user.aboutMe} disabled={!edit && profileId !== loggedId} />
+          <Form.Item name="aboutMe" style={{height:"100%",width:"100%"}} initialValue={user.aboutMe}>
+            <TextArea style={{width: "100%", height: "100%" ,resize: "none", fontSize:"1.3em", color:"black"}} disabled={!edit || profileId !== loggedId} />
           </Form.Item>  
           </Col>
           <Col span={1}/>

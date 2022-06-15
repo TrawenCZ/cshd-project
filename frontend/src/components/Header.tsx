@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import fetcher from '../models/fetcher';
 import logo from '../logo.png'
 
-import { Layout, Menu, Input, Dropdown, Space, Slider } from 'antd'
+import { Layout, Menu, Input, Dropdown, Space, Slider, Button } from 'antd'
 import { Children, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { DownOutlined } from '@ant-design/icons';
 const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
 
-function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRatingRange, setReleaseRange}: any) {
+function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRatingRange, setReleaseRange, setSearchInput}: any) {
   const menu = (
     <Menu
       items={[
@@ -37,6 +37,17 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
             },
           ],
         },
+        {
+          key: 'search',
+          type: 'group',
+          label: 'Search',
+          children: [
+            {
+              key: 'searchInput',
+              label: (<Search onSearch={(value) => setSearchInput(value)}/>),
+            },
+          ],
+        }
       ]}
     />
   );
@@ -100,6 +111,9 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
     if (key == "30"){
       navigate('/register')
     }
+    if (key == "7"){
+      navigate('/')
+    }
 
     if (key === "33") {
       navigate(`/user/${userId}`)
@@ -113,48 +127,65 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
       })
     }
   }
-
   return (
     <Header>
         <Link to={'/'}><img src={logo} className='logo' alt="CSHD Logo"></img></Link>
-        <Menu
+          {window.location.pathname === "/" &&
+            <Menu
+                mode='horizontal'
+                theme='dark'
+                multiple={true}
+                onSelect={menuClick}
+                onDeselect={menuClick}
+                items={[
+                {
+                    label: 'Platforms',
+                    key: 1,
+                    children: platformChildren
+                },
+                {
+                    label: 'Genres',
+                    key: 2,
+                    children: genreChildren
+                },
+                {
+                    label: 'User',
+                    key: 3,
+
+                    children: [{key: valKey[decider][0][0], label: valKey[decider][1][0]}, {key: valKey[decider][0][1], label: valKey[decider][1][1]}, ],
+                },
+                {
+                  label:
+                    <Dropdown overlay={menu}>
+                      <a onClick={e => e.preventDefault()}>
+                        <Space>
+                          Filters & Search
+                          <DownOutlined />
+                        </Space>
+                      </a>
+                    </Dropdown>,
+                  key: 4,
+                },
+                ]} >
+            
+            </Menu>
+            ||
+            <Menu
             mode='horizontal'
             theme='dark'
             multiple={true}
             onSelect={menuClick}
             onDeselect={menuClick}
             items={[
-            {
-                label: 'Platforms',
-                key: 1,
-                children: platformChildren
-            },
-            {
-                label: 'Genres',
-                key: 2,
-                children: genreChildren
-            },
-            {
-                label: 'User',
-                key: 3,
-
-                children: [{key: valKey[decider][0][0], label: valKey[decider][1][0]}, {key: valKey[decider][0][1], label: valKey[decider][1][1]}, ],
-                //children: [{key: 32, label: 'Logout'}, {key: 33, label: 'Profile page'}, ],
-            },
-            {
-              label:
-                <Dropdown overlay={menu}>
-                  <a onClick={e => e.preventDefault()}>
-                    <Space>
-                      Filters
-                      <DownOutlined />
-                    </Space>
-                  </a>
-                </Dropdown>,
-              key: 4
-            }
-            ]} >
-        </Menu>
+              {
+                label: 'Home',
+                key: 7,
+              },
+            ]}
+            >
+            </Menu>
+          }
+        
     </Header>
   );
 };

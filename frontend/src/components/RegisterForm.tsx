@@ -52,6 +52,7 @@ const RegisterForm: React.FC = () => {
       <LayoutHeader/>
     <Content>
       <Row><Col span={24}>{ErrorAlert(error)}</Col></Row>
+      <Row><Col span={24} style={{height:"3em"}}></Col></Row>
       <Row>
       <Col span={8}/>
       <Col span={8}>

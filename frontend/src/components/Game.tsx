@@ -40,7 +40,7 @@ export interface GameProps{
   gameModes: string[],
   genres: GenreProps[],
   developer: DeveloperProps,
-  developerId: string,  
+  developerId: string,
   platforms: PlatformProps[],
   reviews: ReviewProps[]
 };
@@ -53,10 +53,8 @@ function Game() {
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
-  const game: GameProps  = data.data;
-  var date = new Date("2016-01-04 10:34:23");
-  const formattedDate = format(date, "MMMM do, yyyy H:mma");
-  {/* TODO format the releaseDate instead of this placeholder */}
+  const game: GameProps = data.data;
+  const formattedDate = formatDate(new Date(game.releaseDate))
   return (
     <>
     <Layout>
@@ -142,11 +140,11 @@ function Game() {
           <Row>
              {/* TODO Your Review - idk what the getter is */}
           </Row>
-            
+
             {game.reviews.map(((review, index) => {
               return(
-                
-                <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}> 
+
+                <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
 
                   <Col>
                     <Row>
@@ -165,7 +163,7 @@ function Game() {
                       </Col>
                     </Row>
                   </Col>
-                  
+
                   <Col flex="1">
                     <Row>
                       <p>{review.header}</p>
@@ -175,8 +173,8 @@ function Game() {
                     </Row>
                   </Col>
 
-                  
-                  
+
+
                 </Row>
                 )
               }))}
@@ -219,6 +217,15 @@ function Game() {
 };
 
 export default Game;
+
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+const formatDate = (date: Date) => {
+  return monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
+}
 
 
 const contentStyle: React.CSSProperties = {

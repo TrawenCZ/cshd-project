@@ -203,7 +203,9 @@ function Game() {
               <h3>DEVELOPER</h3>
             </Col>
             <Col>
-              <p>{game.developer.name}</p>
+              <Link to={`/developer/${game.developer.id}`}>
+                <p>{game.developer.name}</p>
+              </Link>
             </Col>
           </Row>
         </Col>

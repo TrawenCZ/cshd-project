@@ -55,7 +55,7 @@ function Game() {
 
   const game: GameProps  = data.data;
   var date = new Date("2016-01-04 10:34:23");
-  const formattedDate = format(date, "MMMM do, yyyy H:mma");
+  const formattedDate = format(date, "MMMM do, yyyy");
   {/* TODO format the releaseDate instead of this placeholder */}
   return (
     <>

@@ -221,7 +221,7 @@ export const remove = async (req: Request, res: Response) => {
                 message: "Review does not exist"
             });
         }
-        if (review.userId !== req.session.userId) {
+        if (review.userId !== req.session.userId && !user.isAdmin) {
             return res.status(403).send({
                 status: "error",
                 data: {},

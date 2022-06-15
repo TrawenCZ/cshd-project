@@ -1,15 +1,13 @@
 import {number, object, string, ValidationError} from 'yup';
 import {Request, Response} from 'express'
 import prisma from '../client';
-import {genres} from "./index";
 
 export const list = async (req: Request, res: Response) => {
     try {
-        const page = +(req.query.page || 0)
-
         const genres = await prisma.genre.findMany({
-            skip: page * 10,
-            take: 10,
+            orderBy: {
+                name: "asc"
+            }
         })
         return res.send({
             status: "success",

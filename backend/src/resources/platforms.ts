@@ -4,11 +4,10 @@ import prisma from '../client';
 
 export const list = async (req: Request, res: Response) => {
     try {
-        const page = +(req.query.page || 0)
-
         const platforms = await prisma.platform.findMany({
-            skip: page * 10,
-            take: 10,
+            orderBy: {
+                name: "asc"
+            }
         })
         return res.send({
             status: "success",

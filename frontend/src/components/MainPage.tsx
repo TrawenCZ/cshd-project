@@ -19,35 +19,39 @@ function MainPage() {
   const [games, setGames] = useState([]);
   const [nextEnabled, setNextEnabled] = useState(false)
   const [prevEnabled, setPrevEnabled] = useState(false)
+  const [searchInput, setSearchInput] = useState('')
 
-  useEffect(() => {
-    console.log(ratingRange)
-    axios.post(`http://localhost:4000/api/games?page=${page}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
+  const apiCalls = () => {
+    let endpoint = (searchInput === '') ? `http://localhost:4000/api/games?page=` : `http://localhost:4000/api/search?page=`
+    let body = (searchInput === '') ? {
       genres: genres,
       platforms: platforms,
       ratingRange: ratingRange,
       releaseRange: releaseRange
+    } : {
+      value: searchInput
+    }
+
+    axios.post(`${endpoint}${page}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      ...body
     }).then((response) => {
       console.log(response.data.data)
-      setGames(response.data.data)
+      setGames((searchInput === '') ? response.data.data : response.data.data.games)
     });
     if (page === 0){
       setPrevEnabled(false)
     }
     else if (page > 0){
-      axios.post(`http://localhost:4000/api/games?page=${page-1}`, {
+      axios.post(`${endpoint}${page-1}`, {
         headers: {
           'Content-Type': 'application/json'
         },
-        genres: genres,
-        platforms: platforms,
-        ratingRange: ratingRange,
-        releaseRange: releaseRange
+        ...body
       }).then((response) => {
-        if (response.data.data.length > 0){
+        if ((searchInput === '') ? response.data.data.length : response.data.data.games.length > 0){
           setPrevEnabled(true)
         }
         else {
@@ -56,29 +60,29 @@ function MainPage() {
 
       });
     }
-    axios.post(`http://localhost:4000/api/games?page=${page+1}`, {
+    axios.post(`${endpoint}${page+1}`, {
       headers: {
         'Content-Type': 'application/json'
       },
-      genres: genres,
-      platforms: platforms,
-      ratingRange: ratingRange,
-      releaseRange: releaseRange
+      ...body
     }).then((response) => {
-      if (response.data.data.length > 0){
+      if ((searchInput === '') ? response.data.data.length : response.data.data.games.length > 0){
         setNextEnabled(true);
       }
       else {
         setNextEnabled(false);
       }
     });
+  }
 
-  }, [genres, platforms, page, ratingRange, releaseRange]);
+  useEffect(() => {
+    apiCalls();
+  }, [genres, platforms, page, ratingRange, releaseRange, searchInput]);
 
   return (
     <>
     <Layout>
-      <LayoutHeader setGenre={setGenres} setPlatforms={setPlatforms} setReleaseRange={setReleaseRange} setRatingRange={setRatingRange}/>
+      <LayoutHeader setGenre={setGenres} setPlatforms={setPlatforms} setReleaseRange={setReleaseRange} setRatingRange={setRatingRange} setSearchInput={setSearchInput}/>
       <Content>
         <div className='pagination'>
           {games.length > 0 && <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large" onClick={(event) => setPage(page-1)} disabled={!prevEnabled}/>}

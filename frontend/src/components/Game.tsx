@@ -1,12 +1,14 @@
 import {ImageProps} from './Image'
 import {ReviewProps} from './Review'
 import {PlatformProps} from './Platform'
+import {UserProps} from './User'
 import {GenreProps} from './Genre'
 import {DeveloperProps} from './Developer'
 import MainFooter from "./MainFooter";
 
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
+import axios from 'axios';
 import fetcher from '../models/fetcher';
 import { useState } from 'react';
 import { format } from "date-fns";
@@ -29,8 +31,21 @@ import LayoutHeader from './Header';
 
 const { Header, Footer, Sider, Content } = Layout;
 
+enum ErrorRegister {
+  FAILED_TO_SUBMIT,
+  NO_ERROR,
+
+}
+
+interface FormValues{
+  header:string,
+  rating:number,
+  description:string,
+  gameId:string
+}
 
 export interface GameProps{
+  id:string,
   name:string,
   pictures:ImageProps[],
   description: string,
@@ -49,13 +64,39 @@ export interface GameProps{
 function Game() {
   const [genreId, setGenre] = useState('21');
   const { id } = useParams()
+  const [loggedId, setLoggedId] = useState(undefined)
+
   const { data, error } = useSWR(`http://localhost:4000/api/games/${id}`, fetcher);
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
   const game: GameProps  = data.data;
   var date = new Date("2016-01-04 10:34:23");
-  const formattedDate = formatDate(new Date(game.releaseDate))
+  const formattedDate = formatDate(new Date(game.releaseDate));
+
+  const headers = {
+      "Content-Type": "application/json",
+    };
+    const user = axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true})
+    user.then(response => {
+      setLoggedId(response.data.data.userId)
+    })
+  const onFinish = async (values: FormValues) => {
+    
+    const requestData: FormValues = {
+      header: values.header,
+      rating: values.rating,
+      description: values.description,
+      gameId: game.id
+    }
+    const req = await axios.post('http://localhost:4000/api/reviews', requestData, {headers})
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  
   return (
     <>
     <Layout>
@@ -125,16 +166,18 @@ function Game() {
               labelCol={{ span: 3 }}
               wrapperCol={{ span: 100 }}
               layout="horizontal"
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
             >
-              <Form.Item label="Title">
+              <Form.Item label="Title" rules={[{ required: true, message: 'Please enter the title of your review!' }]}>
                 <Input />
               </Form.Item>
               <Form.Item label="Description">
                 <TextArea rows={6} />
               </Form.Item>
-              <Form.Item label="Rating">
+              <Form.Item label="Rating" rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
                 <InputNumber />
-                <Button style={{float: "right"}}>Submit review</Button>
+                <Button style={{float: "right"}} htmlType="submit">Submit review</Button>
               </Form.Item>
               </Form>
 
@@ -181,7 +224,7 @@ function Game() {
               }))}
         </Col>
         <Col span={5}>
-          <Row>
+          <Row justify="center">
             <div>
               <Image src={game.pictures[0].source}/>
             </div>

@@ -40,6 +40,12 @@ enum ErrorRegister {
 interface FormValues{
   header:string,
   rating:number,
+  description:string
+}
+
+interface RequestValues{
+  header:string,
+  rating:number,
   description:string,
   gameId:string
 }
@@ -66,6 +72,15 @@ function Game() {
   const { id } = useParams()
   const [loggedId, setLoggedId] = useState(undefined)
 
+  enum ErrorRegister {
+    USERNAME_EXISTS,
+    PASSWORDS_NOT_SAME,
+    NO_ERROR,
+  
+  }
+  const [errorPost, setErrorPost] = useState<ErrorRegister>(ErrorRegister.NO_ERROR);
+  const [goHome, setToGoHome] = useState<boolean>(false);
+
   const { data, error } = useSWR(`http://localhost:4000/api/games/${id}`, fetcher);
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
@@ -73,6 +88,8 @@ function Game() {
   const game: GameProps  = data.data;
   var date = new Date("2016-01-04 10:34:23");
   const formattedDate = formatDate(new Date(game.releaseDate));
+  
+
 
   const headers = {
       "Content-Type": "application/json",
@@ -81,15 +98,16 @@ function Game() {
     user.then(response => {
       setLoggedId(response.data.data.userId)
     })
-  const onFinish = async (values: FormValues) => {
+  const onFinish = (values: FormValues) => {
     
-    const requestData: FormValues = {
+    const requestData: RequestValues = {
       header: values.header,
       rating: values.rating,
       description: values.description,
       gameId: game.id
     }
-    const req = await axios.post('http://localhost:4000/api/reviews', requestData, {headers})
+    const req =  axios.post('http://localhost:4000/api/reviews', requestData, {headers, withCredentials: true})
+    
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -165,20 +183,24 @@ function Game() {
             {/* TODO if user wrote review on this game*/}
           {loggedId && 
               <Form
+              name="basic"
               labelCol={{ span: 3 }}
               wrapperCol={{ span: 100 }}
-              layout="horizontal"
+              initialValues={{ remember: true }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
+              autoComplete="off"
             >
-              <Form.Item label="Title" rules={[{ required: true, message: 'Please enter the title of your review!' }]}>
+              <Form.Item label="Title" name="header" rules={[{ required: true, message: 'Please enter the title of your review!' }]}>
                 <Input />
               </Form.Item>
-              <Form.Item label="Description">
+              <Form.Item label="Description" name="description">
                 <TextArea rows={6} />
               </Form.Item>
-              <Form.Item label="Rating" rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
+              <Form.Item label="Rating" name="rating" rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
                 <InputNumber />
+              </Form.Item>
+              <Form.Item>
                 <Button style={{float: "right"}} htmlType="submit">Submit review</Button>
               </Form.Item>
               </Form>}

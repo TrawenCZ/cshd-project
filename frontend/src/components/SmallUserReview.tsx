@@ -1,22 +1,17 @@
-import useSWR from 'swr';
-import fetcher from '../models/fetcher';
-
 import { Col, Row } from 'antd'
-import TextArea from 'antd/lib/input/TextArea';
-import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { GameProps } from './Game'
 
 
 export interface SmallUserReviewProps {
-  id:string,
   header:string,
   rating:number,
   description:string,
   game:GameProps
 }
 
-export function SmallUserReview({id, header, rating, description, game}: SmallUserReviewProps) {
+export function SmallUserReview({header, rating, description, game}: SmallUserReviewProps) {
   return (
     <>
     <Row>
@@ -29,7 +24,9 @@ export function SmallUserReview({id, header, rating, description, game}: SmallUs
     <Row>
       <Col span={2}/>
       <Col span={3}>
-        <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%"}} src={game.pictures[0].source} alt={game.pictures[0].alt} />
+        <Link to={`/game/${game.id}`}>
+          <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%"}} src={game.pictures[0].source} alt={game.pictures[0].alt} />
+        </Link>
       </Col>
       <Col span={1}/>
       <Col span={12}>

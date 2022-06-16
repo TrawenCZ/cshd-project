@@ -56,11 +56,10 @@ function Profile() {
 
   const onFinish = async (values: IFormValue) => {
     console.log(values.aboutMe)
-    const headers = {
-      "Content-Type": "application/json",
-    }
+
     setEdit(!edit)
     if(edit) {
+      console.log("TEDKA")
       await axios.put(`http://localhost:4000/api/users/${id}`, {aboutMe: values.aboutMe},{headers, withCredentials: true})
     }
 
@@ -84,7 +83,7 @@ function Profile() {
         <Col span={4}/>
         <Col span={11} style={{margin:"0"}}>
           <Form.Item name="aboutMe" style={{margin:"0"}} initialValue={user.aboutMe}>
-            <TextArea style={{resize: "none",height:"100%", fontSize:"1.3em", color:"black", margin:"0"}} disabled={!edit || profileId !== loggedId} />
+            <TextArea style={{resize: "none", fontSize:"1.3em", color:"black", margin:"0", height:"12vw"}} disabled={!edit || profileId !== loggedId} />
           </Form.Item>
         </Col>
         <Col span={2}/>

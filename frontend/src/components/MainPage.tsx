@@ -38,7 +38,6 @@ function MainPage() {
       },
       ...body
     }).then((response) => {
-      console.log(response.data.data)
       setGames((searchInput === '') ? response.data.data : response.data.data.games)
     });
     if (page === 0){
@@ -92,7 +91,7 @@ function MainPage() {
             justify="center">
               {games.map((game: any) => {
                 return (
-                  <Col>
+                  <Col key={game.id}>
                     <Card
                       title={game.name}
                       bordered={true}
@@ -100,8 +99,8 @@ function MainPage() {
                       extra={<h1>{game.rating}</h1>}
                       style={{ width: 264 }}
                       cover={<Link to={`/game/${game.id}`}><img src={game.pictures[0].source} alt={game.pictures[0].alt}></img></Link>}
+                      key={game.id}
                     >
-
                     </Card>
                   </Col>)
               })}

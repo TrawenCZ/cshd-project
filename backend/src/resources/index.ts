@@ -24,7 +24,9 @@ export const search = async (req: Request, res: Response) => {
                     { name: { contains: data.value } },
                     { description: { contains: data.value } },
                     { platforms: { some: { name: { contains: data.value } } } },
-                    { genres: { some: { name: { contains: data.value } } } }
+                    { genres: { some: { name: { contains: data.value } } } },
+                    { gameModes: { some: { name: { contains: data.value } } } },
+                    { developer: { name: { contains: data.value } } }
                 ],
             },
             select: {

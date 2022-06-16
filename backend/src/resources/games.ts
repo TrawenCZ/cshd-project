@@ -138,6 +138,7 @@ export const getOne = async (req: Request, res: Response) => {
                         description: true,
                         user: {
                             select: {
+                                id: true,
                                 username: true,
                                 profilePicture: true
                             }

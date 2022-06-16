@@ -20,16 +20,12 @@ export const search = async (req: Request, res: Response) => {
 
         const games = await prisma.game.findMany({
             where: {
-                OR : [{
-                    name: {
-                        contains: data.value
-                    }
-                    },
-                    {
-                    description: {
-                        contains: data.value
-                    }
-                    }],
+                OR : [
+                    { name: { contains: data.value } },
+                    { description: { contains: data.value } },
+                    { platforms: { some: { name: { contains: data.value } } } },
+                    { genres: { some: { name: { contains: data.value } } } }
+                ],
             },
             select: {
                 id: true,
@@ -45,22 +41,6 @@ export const search = async (req: Request, res: Response) => {
             },
             skip: page * 10,
             take: 10
-        })
-        const platforms = await prisma.platform.findMany({
-            where: {
-                name: {
-                    contains: data.value
-                }
-            },
-            select: {
-                id: true,
-                name: true
-            },
-            orderBy: {
-                name: "asc"
-            },
-            skip: page * 5,
-            take: 5
         })
         const users = await prisma.user.findMany({
             where: {
@@ -86,33 +66,8 @@ export const search = async (req: Request, res: Response) => {
             skip: page * 5,
             take: 5
         })
-        const developers = await prisma.developer.findMany({
-            where: {
-                OR : [{
-                    name: {
-                        contains: data.value
-                    }
-                },
-                    {
-                        description: {
-                            contains: data.value
-                        }
-                    }],
-            },
-            select: {
-                id: true,
-                name: true
-            },
-            orderBy: {
-                name: "asc"
-            },
-            skip: page * 5,
-            take: 5
-        })
         const output = {
             games: games,
-            platforms: platforms,
-            developers: developers,
             users: users
         }
         return res.send({

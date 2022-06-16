@@ -8,6 +8,7 @@ import session from 'express-session'
 import {games, gameModes, genres, developers, platforms, reviews, users, search} from './resources'
 import cors from 'cors'
 import {checkLogin} from "./resources/users";
+import {randomBytes} from "crypto";
 
 const api = express()
 
@@ -23,7 +24,7 @@ api.use(session({
   name: process.env.SESS_NAME || "dev",
   resave: false,
   saveUninitialized: false,
-  secret: "secret",
+  secret: randomBytes(64).toString("hex"),
   cookie: {
     maxAge: ONE_HOUR,
     sameSite: true,

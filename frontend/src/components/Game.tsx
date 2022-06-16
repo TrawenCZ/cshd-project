@@ -192,7 +192,7 @@ function Game() {
 
                   <Col>
                     <Row>
-                      <p>{review.user.username}</p>
+                      <h2>{review.user.username}</h2>
                     </Row>
                     <Row>
                       <div>
@@ -203,14 +203,14 @@ function Game() {
                     </Row>
                     <Row justify="center" gutter={[24, 24]}>
                       <Col>
-                        <p>{review.rating}%</p>
+                        <h1>{review.rating}%</h1>
                       </Col>
                     </Row>
                   </Col>
 
                   <Col flex="1">
                     <Row>
-                      <p>{review.header}</p>
+                      <h2>{review.header}</h2>
                     </Row>
                     <Row>
                       <p>{review.description}</p>

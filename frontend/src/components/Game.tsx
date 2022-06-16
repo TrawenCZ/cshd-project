@@ -102,7 +102,7 @@ function Game() {
     <Layout>
     <LayoutHeader setGenres={setGenre}/>
       <Content>
-        <Row justify="center" gutter={[24, 16]}>
+        <Row justify="center" gutter={[24, 24]}>
         <Col span={11}>
           <Row justify="space-between">
             <h1 style={{color:"black", fontSize:"50px"}}>{game.name}</h1>
@@ -161,8 +161,10 @@ function Game() {
               <h2>Reviews</h2>
             </Col>
           </Row>
-
-            <Form
+            
+            {/* TODO if user wrote review on this game*/}
+          {loggedId && 
+              <Form
               labelCol={{ span: 3 }}
               wrapperCol={{ span: 100 }}
               layout="horizontal"
@@ -179,7 +181,8 @@ function Game() {
                 <InputNumber />
                 <Button style={{float: "right"}} htmlType="submit">Submit review</Button>
               </Form.Item>
-              </Form>
+              </Form>}
+
 
           <Row>
              {/* TODO Your Review - idk what the getter is */}
@@ -197,7 +200,7 @@ function Game() {
                     <Row>
                       <div>
                         <Link to={`/user/${review.user.id}`}>
-                          <Image width={100} src={review.user.profilePicture} />
+                          <Image width={100} preview={false} src={review.user.profilePicture} />
                         </Link>
                       </div>
                     </Row>

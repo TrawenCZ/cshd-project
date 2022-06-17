@@ -116,6 +116,9 @@ function Game() {
       reviewId = review.id;
     }   
   }
+  const deleteYourReview = () => {
+    axios.delete(`http://localhost:4000/api/reviews/${reviewId}`, {headers, withCredentials: true})
+  }
   const onEdit = async (values: FormValues) => {
     const requestData: RequestValues = {
       header: values.header,
@@ -268,11 +271,11 @@ function Game() {
                   </Form.Item>
                   </Col>
                   <Col>
-                  <Row>
-                    <Button htmlType="submit" type="primary">EDIT ABOUT ME</Button>
+                    <Row>
+                      <Button htmlType="submit" type="primary">EDIT</Button>
                     </Row>
                     <Row>
-                      <p>Delete</p>
+                      <Button onClick={() => deleteYourReview()} type="primary">DELETE</Button>
                     </Row>
                   </Col>
                 </Row>

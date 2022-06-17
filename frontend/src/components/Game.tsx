@@ -82,7 +82,7 @@ function Game() {
     USERNAME_EXISTS,
     PASSWORDS_NOT_SAME,
     NO_ERROR,
-  
+
   }
   const [errorPost, setErrorPost] = useState<ErrorRegister>(ErrorRegister.NO_ERROR);
   const [goHome, setToGoHome] = useState<boolean>(false);
@@ -95,9 +95,8 @@ function Game() {
   if (!data) return <div>loading...</div>;
 
   const game: GameProps  = data.data;
-  var date = new Date("2016-01-04 10:34:23");
   const formattedDate = formatDate(new Date(game.releaseDate));
-  
+
 
 
   const headers = {
@@ -115,17 +114,17 @@ function Game() {
       gameId: game.id
     }
     const req = await axios.post('http://localhost:4000/api/reviews', requestData, {headers, withCredentials: true})
-    mutate(`http://localhost:4000/api/games/${id}`)
+    await mutate(`http://localhost:4000/api/games/${id}`)
   };
   var reviewId = "";
   for (var review of game.reviews) {
     if (review.user.id == loggedId) {
       reviewId = review.id;
-    }   
+    }
   }
   const deleteYourReview = async() => {
     await axios.delete(`http://localhost:4000/api/reviews/${reviewId}`, {headers, withCredentials: true});
-    mutate(`http://localhost:4000/api/games/${id}`)
+    await mutate(`http://localhost:4000/api/games/${id}`)
   }
   const onEdit = async (values: FormValues) => {
     const requestData: RequestValues = {
@@ -166,7 +165,7 @@ function Game() {
                 <div>
                   <Image src={picture.source}/>
                 </div>
-                )                     
+                )
                 }
               }))}
             </Carousel>
@@ -213,7 +212,7 @@ function Game() {
               <h2>Reviews</h2>
             </Col>
           </Row>
-            
+
 
           {loggedId && reviewId == "" &&
               <Form
@@ -248,7 +247,7 @@ function Game() {
 
                 <Form onFinish={onEdit}>
                 <Row style = {{backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
-                  
+
                   <Col span = "2">
                     <Row>
                       <h2>{review.user.username}</h2>
@@ -266,7 +265,7 @@ function Game() {
                         <Form.Item name="rating" initialValue={review.rating} rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
                           <InputNumber min={0} max={100} disabled={!edit}/>
                         </Form.Item>
-                        
+
                       </Col>
                     </Row>
                   </Col>
@@ -290,13 +289,13 @@ function Game() {
                 </Row>
                 </Form>
 
-                
+
                 )
               }
               }))}
               <hr/>
 
-            
+
 
 
 
@@ -304,7 +303,7 @@ function Game() {
               if (loggedId != review.user.id){
               return(
 
-                
+
                 <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
 
                   <Col>
@@ -334,7 +333,7 @@ function Game() {
                     </Row>
                   </Col>
                 </Row>
-                
+
                 )
               }
               }))}
@@ -387,7 +386,7 @@ function Game() {
               <h1 style={{color:"black", fontSize:"50px"}}>{game.name}</h1>
               <h1 style={{color:"black", fontSize:"50px"}}>{game.rating}%</h1>
             </Row>
-  
+
               <Carousel autoplay>
               {game.pictures.map((picture => {
                   if (!picture.isMain) {
@@ -395,7 +394,7 @@ function Game() {
                   <div>
                     <Image src={picture.source}/>
                   </div>
-                  )                     
+                  )
                   }
                 }))}
               </Carousel>
@@ -442,8 +441,8 @@ function Game() {
                 <h2>Reviews</h2>
               </Col>
             </Row>
-              
-  
+
+
             {loggedId && reviewId == "" &&
                 <Form
                 name="basic"
@@ -467,17 +466,17 @@ function Game() {
                   <Button style={{float: "right"}} htmlType="submit">Submit review</Button>
                 </Form.Item>
                 </Form>}
-  
-  
-  
+
+
+
                {/* TODO Your Review - idk what the getter is */}
                {game.reviews.map(((review, index) => {
                 if (loggedId == review.user.id){
                 return(
-  
+
                   <Form onFinish={onEdit}>
                   <Row style = {{backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
-                    
+
                     <Col span = "2">
                       <Row>
                         <h2>{review.user.username}</h2>
@@ -491,15 +490,15 @@ function Game() {
                       </Row>
                       <Row  gutter={[24, 24]} justify="center">
                         <Col>
-  
+
                           <Form.Item name="rating" initialValue={review.rating} rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
                             <InputNumber min={0} max={100} disabled={!edit}/>
                           </Form.Item>
-                          
+
                         </Col>
                       </Row>
                     </Col>
-  
+
                     <Col flex="0.7">
                     <Form.Item name="header" initialValue={review.header} rules={[{ required: true, message: 'Please enter the title of your review!' }]}>
                       <Input disabled={!edit} />
@@ -518,24 +517,24 @@ function Game() {
                     </Col>
                   </Row>
                   </Form>
-  
-                  
+
+
                   )
                 }
                 }))}
                 <hr/>
-  
-              
-  
-  
-  
+
+
+
+
+
               {game.reviews.map(((review, index) => {
                 if (loggedId != review.user.id){
                 return(
-  
-                  
+
+
                   <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
-  
+
                     <Col>
                       <Row>
                         <h2>{review.user.username}</h2>
@@ -553,7 +552,7 @@ function Game() {
                         </Col>
                       </Row>
                     </Col>
-  
+
                     <Col flex="1">
                       <Row>
                         <h2>{review.header}</h2>
@@ -563,7 +562,7 @@ function Game() {
                       </Row>
                     </Col>
                   </Row>
-                  
+
                   )
                 }
                 }))}
@@ -600,7 +599,7 @@ function Game() {
         </Content>
         <MainFooter/>
       </Layout>
-  
+
       </>
     );
     }

@@ -13,6 +13,7 @@ import fetcher from '../models/fetcher';
 import { useState } from 'react';
 import { format } from "date-fns";
 
+import { useMediaQuery } from 'react-responsive';
 import TextArea from 'antd/lib/input/TextArea';
 import { useParams } from 'react-router-dom';
 import { Layout, Row, Col, Carousel, Image, Tag,
@@ -88,6 +89,7 @@ function Game() {
 
   const { data, error } = useSWR(`http://localhost:4000/api/games/${id}`, fetcher);
   const { mutate } = useSWRConfig()
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
@@ -144,15 +146,14 @@ function Game() {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
-  
+  if (isMobile){
   return (
     <>
     <Layout>
     <LayoutHeader setGenres={setGenre}/>
       <Content>
         <Row justify="center" gutter={[24, 24]}>
-        <Col span={11}>
+        <Col  flex="1 0 100%">
           <Row justify="space-between">
             <h1 style={{color:"black", fontSize:"50px"}}>{game.name}</h1>
             <h1 style={{color:"black", fontSize:"50px"}}>{game.rating}%</h1>
@@ -338,7 +339,7 @@ function Game() {
               }
               }))}
         </Col>
-        <Col span={5}>
+        <Col flex="1 0 100%">
           <Row justify="center">
             <div>
               <Image src={game.pictures[0].source}/>
@@ -373,6 +374,236 @@ function Game() {
 
     </>
   );
+  }
+  else {
+    return (
+      <>
+      <Layout>
+      <LayoutHeader setGenres={setGenre}/>
+        <Content>
+          <Row justify="center" gutter={[24, 24]}>
+          <Col span={11}>
+            <Row justify="space-between">
+              <h1 style={{color:"black", fontSize:"50px"}}>{game.name}</h1>
+              <h1 style={{color:"black", fontSize:"50px"}}>{game.rating}%</h1>
+            </Row>
+  
+              <Carousel autoplay>
+              {game.pictures.map((picture => {
+                  if (!picture.isMain) {
+                  return(
+                  <div>
+                    <Image src={picture.source}/>
+                  </div>
+                  )                     
+                  }
+                }))}
+              </Carousel>
+            <Row justify="space-between">
+              <Col>
+                <Row>
+                  <h2>Platforms</h2>
+                </Row>
+                <Row>
+                {game.platforms.map((platform => {
+                return(
+                  <div>
+                    <Link to={`/platform/${platform.id}`}>
+                      <Tag>
+                        {platform.name}
+                      </Tag>
+                    </Link>
+                  </div>
+                  )
+                }))}
+                </Row>
+              </Col>
+              <Col>
+                <Row>
+                  <h2>Genres</h2>
+                </Row>
+                <Row>
+                {game.genres.map((genre => {
+                return(
+                  <div>
+                    <Link to={`/genre/${genre.id}`}>
+                      <Tag>
+                        {genre.name}
+                      </Tag>
+                    </Link>
+                  </div>
+                  )
+                }))}
+                </Row>
+              </Col>
+            </Row>
+            <Row justify="space-between">
+              <Col>
+                <h2>Reviews</h2>
+              </Col>
+            </Row>
+              
+  
+            {loggedId && reviewId == "" &&
+                <Form
+                name="basic"
+                labelCol={{ span: 3 }}
+                wrapperCol={{ span: 100 }}
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item label="Title" name="header" rules={[{ required: true, message: 'Please enter the title of your review!' }]}>
+                  <Input />
+                </Form.Item>
+                <Form.Item label="Description" name="description">
+                  <TextArea rows={6} />
+                </Form.Item>
+                <Form.Item label="Rating" name="rating" rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
+                  <InputNumber min={0} max={100} />
+                </Form.Item>
+                <Form.Item>
+                  <Button style={{float: "right"}} htmlType="submit">Submit review</Button>
+                </Form.Item>
+                </Form>}
+  
+  
+  
+               {/* TODO Your Review - idk what the getter is */}
+               {game.reviews.map(((review, index) => {
+                if (loggedId == review.user.id){
+                return(
+  
+                  <Form onFinish={onEdit}>
+                  <Row style = {{backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
+                    
+                    <Col span = "2">
+                      <Row>
+                        <h2>{review.user.username}</h2>
+                      </Row>
+                      <Row>
+                        <div>
+                          <Link to={`/user/${review.user.id}`}>
+                            <Image width={100} preview={false} src={review.user.profilePicture} />
+                          </Link>
+                        </div>
+                      </Row>
+                      <Row  gutter={[24, 24]} justify="center">
+                        <Col>
+  
+                          <Form.Item name="rating" initialValue={review.rating} rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
+                            <InputNumber min={0} max={100} disabled={!edit}/>
+                          </Form.Item>
+                          
+                        </Col>
+                      </Row>
+                    </Col>
+  
+                    <Col flex="0.7">
+                    <Form.Item name="header" initialValue={review.header} rules={[{ required: true, message: 'Please enter the title of your review!' }]}>
+                      <Input disabled={!edit} />
+                    </Form.Item>
+                    <Form.Item initialValue={review.description} name="description">
+                      <TextArea disabled={!edit} rows={6} />
+                    </Form.Item>
+                    </Col>
+                    <Col>
+                      <Row>
+                        <Button htmlType="submit" type="primary" ><EditOutlined /></Button>
+                      </Row>
+                      <Row>
+                        <Button onClick={() => deleteYourReview()} type="primary"><DeleteOutlined /></Button>
+                      </Row>
+                    </Col>
+                  </Row>
+                  </Form>
+  
+                  
+                  )
+                }
+                }))}
+                <hr/>
+  
+              
+  
+  
+  
+              {game.reviews.map(((review, index) => {
+                if (loggedId != review.user.id){
+                return(
+  
+                  
+                  <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
+  
+                    <Col>
+                      <Row>
+                        <h2>{review.user.username}</h2>
+                      </Row>
+                      <Row>
+                        <div>
+                          <Link to={`/user/${review.user.id}`}>
+                            <Image width={100} preview={false} src={review.user.profilePicture} />
+                          </Link>
+                        </div>
+                      </Row>
+                      <Row justify="center" gutter={[24, 24]}>
+                        <Col>
+                          <h1>{review.rating}%</h1>
+                        </Col>
+                      </Row>
+                    </Col>
+  
+                    <Col flex="1">
+                      <Row>
+                        <h2>{review.header}</h2>
+                      </Row>
+                      <Row>
+                        <p>{review.description}</p>
+                      </Row>
+                    </Col>
+                  </Row>
+                  
+                  )
+                }
+                }))}
+          </Col>
+          <Col span={5}>
+            <Row justify="center">
+              <div>
+                <Image src={game.pictures[0].source}/>
+              </div>
+            </Row>
+            <Row>
+              <p>{game.description}</p>
+            </Row>
+            <Row justify="space-between">
+              <Col>
+                <h3>RELEASED</h3>
+              </Col>
+              <Col>
+                <p>{formattedDate}</p>
+              </Col>
+            </Row>
+            <Row justify="space-between">
+              <Col>
+                <h3>DEVELOPER</h3>
+              </Col>
+              <Col>
+                <Link to={`/developer/${game.developer.id}`}>
+                  <p>{game.developer.name}</p>
+                </Link>
+              </Col>
+            </Row>
+          </Col>
+          </Row>
+        </Content>
+        <MainFooter/>
+      </Layout>
+  
+      </>
+    );
+    }
 };
 
 export default Game;

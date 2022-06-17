@@ -1,8 +1,7 @@
 import { Col, Row } from 'antd'
 import { Link } from 'react-router-dom';
-
 import { GameProps } from './Game'
-
+import "../styles/small.css"
 
 export interface SmallUserReviewProps {
   header:string,
@@ -17,7 +16,7 @@ export function SmallUserReview({header, rating, description, game}: SmallUserRe
     <Row>
       <Col span={2}/>
       <Col span={3}>
-        <h4 style={{textAlign:'center'}}>{game.name}</h4>
+        <h4 style={{textAlign:"center"}}>{game.name}</h4>
       </Col>
       <Col span={18}/>
     </Row>
@@ -25,7 +24,7 @@ export function SmallUserReview({header, rating, description, game}: SmallUserRe
       <Col span={2}/>
       <Col span={3}>
         <Link to={`/game/${game.id}`}>
-          <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%"}} src={game.pictures[0].source} alt={game.pictures[0].alt} />
+          <img className="small-game-image" src={game.pictures[0].source} alt={game.pictures[0].alt} />
         </Link>
       </Col>
       <Col span={1}/>
@@ -33,7 +32,7 @@ export function SmallUserReview({header, rating, description, game}: SmallUserRe
         <h1>{header}</h1>
         <p>{description}</p>
       </Col>
-      <Col span={3} style={{lineHeight:"100%"}}><h1 style={{textAlign:"center"}}>{rating} %</h1></Col>
+      <Col span={3}><h1 style={{textAlign:"center"}}>{rating} %</h1></Col>
       <Col span={2}/>
     </Row>
     </>

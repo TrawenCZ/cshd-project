@@ -84,7 +84,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
   const platformChildren = new Array(platforms.length + 1)
   platformChildren[0] = {key: '11', label: 'All platforms'}
   for (let i = 0; i < platforms.length; i++) {
-    platformChildren[i+1] = {key: platforms[i].id, label: platforms[i].name}
+    platformChildren[i + 1] = {key: platforms[i].id, label: platforms[i].name}
   }
 
   function menuClick({ item, key, keyPath, selectedKeys, domEvent }: any){
@@ -108,13 +108,13 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
       }
     }
 
-    if (key == "31"){
+    if (key === "31"){
       navigate('/login')
     }
-    if (key == "30"){
+    if (key === "30"){
       navigate('/register')
     }
-    if (key == "7"){
+    if (key === "7"){
       navigate('/')
     }
 

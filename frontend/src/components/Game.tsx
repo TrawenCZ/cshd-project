@@ -7,7 +7,7 @@ import {DeveloperProps} from './Developer'
 import MainFooter from "./MainFooter";
 
 import { Link } from 'react-router-dom';
-import useSWR from 'swr';
+import useSWR, {useSWRConfig} from 'swr';
 import axios from 'axios';
 import fetcher from '../models/fetcher';
 import { useState } from 'react';
@@ -27,6 +27,10 @@ import { Layout, Row, Col, Carousel, Image, Tag,
   TreeSelect,
   Switch,
   Checkbox,} from 'antd';
+import {
+    DeleteOutlined,
+    EditOutlined
+  } from '@ant-design/icons';
 import LayoutHeader from './Header';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -83,6 +87,8 @@ function Game() {
   const [goHome, setToGoHome] = useState<boolean>(false);
 
   const { data, error } = useSWR(`http://localhost:4000/api/games/${id}`, fetcher);
+  const { mutate } = useSWRConfig()
+
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
@@ -99,16 +105,15 @@ function Game() {
     user.then(response => {
       setLoggedId(response.data.data.userId)
     })
-  const onFinish = (values: FormValues) => {
-    
+  const onFinish = async(values: FormValues) => {
     const requestData: RequestValues = {
       header: values.header,
       rating: values.rating,
       description: values.description,
       gameId: game.id
     }
-    const req =  axios.post('http://localhost:4000/api/reviews', requestData, {headers, withCredentials: true})
-
+    const req = await axios.post('http://localhost:4000/api/reviews', requestData, {headers, withCredentials: true})
+    mutate(`http://localhost:4000/api/games/${id}`)
   };
   var reviewId = "";
   for (var review of game.reviews) {
@@ -116,8 +121,9 @@ function Game() {
       reviewId = review.id;
     }   
   }
-  const deleteYourReview = () => {
-    axios.delete(`http://localhost:4000/api/reviews/${reviewId}`, {headers, withCredentials: true});
+  const deleteYourReview = async() => {
+    await axios.delete(`http://localhost:4000/api/reviews/${reviewId}`, {headers, withCredentials: true});
+    mutate(`http://localhost:4000/api/games/${id}`)
   }
   const onEdit = async (values: FormValues) => {
     const requestData: RequestValues = {
@@ -205,7 +211,7 @@ function Game() {
             </Col>
           </Row>
             
-            {/* TODO if user wrote review on this game*/}
+
           {loggedId && reviewId == "" &&
               <Form
               name="basic"
@@ -272,10 +278,10 @@ function Game() {
                   </Col>
                   <Col>
                     <Row>
-                      <Button htmlType="submit" type="primary">EDIT</Button>
+                      <Button htmlType="submit" type="primary" ><EditOutlined /></Button>
                     </Row>
                     <Row>
-                      <Button onClick={() => deleteYourReview()} type="primary">DELETE</Button>
+                      <Button onClick={() => deleteYourReview()} type="primary"><DeleteOutlined /></Button>
                     </Row>
                   </Col>
                 </Row>

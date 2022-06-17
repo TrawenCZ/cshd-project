@@ -185,8 +185,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
             mode='horizontal'
             theme='dark'
             multiple={true}
-            onSelect={menuClick}
-            onDeselect={menuClick}
+            onClick={() => navigate('/')}
             items={[
               {
                 label: 'Home',

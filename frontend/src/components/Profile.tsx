@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import MainFooter from "./MainFooter";
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
-import '../styles/profile.css'
+
 const { Content } = Layout;
 
 export interface ProfileProps {
@@ -55,8 +55,11 @@ function Profile() {
   if (!data) return <div>loading...</div>;
 
   const onFinish = async (values: IFormValue) => {
+    console.log(values.aboutMe)
+
     setEdit(!edit)
     if(edit) {
+      console.log("TEDKA")
       await axios.put(`http://localhost:4000/api/users/${id}`, {aboutMe: values.aboutMe},{headers, withCredentials: true})
     }
 
@@ -75,12 +78,12 @@ function Profile() {
       <Row style={{backgroundColor:"#030d16", margin:"0"}}>
         <Col span={4}/>
         <Col span={3}>
-          <img className="profile-icon" src={user.profilePicture} alt="User's personal icon"/>
+          <img style={{objectFit: "cover" , width: "100%", maxHeight: "100%", borderRadius: "50%"}} src={user.profilePicture} alt="User's personal icon"/>
         </Col>
         <Col span={4}/>
         <Col span={11} style={{margin:"0"}}>
           <Form.Item name="aboutMe" style={{margin:"0"}} initialValue={user.aboutMe}>
-            <TextArea style={{height:"12vw"}} className="profile-info" disabled={!edit || profileId !== loggedId} />
+            <TextArea style={{resize: "none", fontSize:"1.3em", color:"black", margin:"0", height:"12vw"}} disabled={!edit || profileId !== loggedId} />
           </Form.Item>
         </Col>
         <Col span={2}/>
@@ -88,11 +91,11 @@ function Profile() {
       <Row style={{height:"3em", backgroundColor:"#030d16" }}>
         <Col span={4}/>
         <Col span={3}>
-            <h1 className="profile-username">{user.username}</h1>
+            <h1 style={{textAlign:"center", color:"white"}}>{user.username}</h1>
         </Col>
         <Col span={4}/>
         <Col span={11}>
-          <Form.Item className='profile-edit__button'>
+          <Form.Item style={{margin:"0", float:"left"}}>
           {
             profileId === loggedId && <Button htmlType="submit" type="primary" icon={(edit) ? <UnlockOutlined />:<LockOutlined />}>EDIT ABOUT ME</Button>
           }

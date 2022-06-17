@@ -13,14 +13,14 @@ export interface SmallUserReviewProps {
 export function SmallUserReview({header, rating, description, game}: SmallUserReviewProps) {
   return (
     <>
-    <Row>
+    <Row style = {{paddingTop:"20px"}}>
       <Col span={2}/>
       <Col span={3}>
         <h4 style={{textAlign:"center"}}>{game.name}</h4>
       </Col>
       <Col span={18}/>
     </Row>
-    <Row>
+    <Row style = {{paddingBottom:"20px"}}>
       <Col span={2}/>
       <Col span={3}>
         <Link to={`/game/${game.id}`}>
@@ -32,7 +32,7 @@ export function SmallUserReview({header, rating, description, game}: SmallUserRe
         <h1>{header}</h1>
         <p>{description}</p>
       </Col>
-      <Col span={3}><h1 style={{textAlign:"center"}}>{rating} %</h1></Col>
+      <Col span={3}><h1 style={{textAlign:"center", fontSize:"50px"}}>{rating} %</h1></Col>
       <Col span={2}/>
     </Row>
     </>

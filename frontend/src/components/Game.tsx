@@ -69,6 +69,7 @@ export interface GameProps{
 
 function Game() {
   const [genreId, setGenre] = useState('21');
+  const [edit, setEdit] = useState<boolean>(false)
   const { id } = useParams()
   const [loggedId, setLoggedId] = useState(undefined)
 
@@ -107,6 +108,27 @@ function Game() {
       gameId: game.id
     }
     const req =  axios.post('http://localhost:4000/api/reviews', requestData, {headers, withCredentials: true})
+
+  };
+  var reviewId = "";
+  for (var review of game.reviews) {
+    if (review.user.id == loggedId) {
+      reviewId = review.id;
+    }   
+  }
+  const onEdit = async (values: FormValues) => {
+    const requestData: RequestValues = {
+      header: values.header,
+      rating: values.rating,
+      description: values.description,
+      gameId: game.id
+    }
+
+    setEdit(!edit)
+    if(edit) {
+      console.log("TEDKA")
+      await axios.put(`http://localhost:4000/api/reviews/${reviewId}`, requestData , {headers, withCredentials: true})
+    }
 
   };
 
@@ -212,10 +234,10 @@ function Game() {
               if (loggedId == review.user.id){
               return(
 
-                
+                <Form onFinish={onEdit}>
                 <Row style = {{backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
-
-                  <Col>
+                  
+                  <Col span = "2">
                     <Row>
                       <h2>{review.user.username}</h2>
                     </Row>
@@ -226,30 +248,36 @@ function Game() {
                         </Link>
                       </div>
                     </Row>
-                    <Row justify="center" gutter={[24, 24]}>
+                    <Row  gutter={[24, 24]} justify="center">
                       <Col>
-                        <h1>{review.rating}%</h1>
+
+                        <Form.Item name="rating" initialValue={review.rating} rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
+                          <InputNumber disabled={!edit}/>
+                        </Form.Item>
+                        
                       </Col>
                     </Row>
                   </Col>
 
-                  <Col flex="1">
-                    <Row>
-                      <h2>{review.header}</h2>
-                    </Row>
-                    <Row>
-                      <p>{review.description}</p>
-                    </Row>
+                  <Col flex="0.7">
+                  <Form.Item name="header" initialValue={review.header} rules={[{ required: true, message: 'Please enter the title of your review!' }]}>
+                    <Input disabled={!edit} />
+                  </Form.Item>
+                  <Form.Item initialValue={review.description} name="description">
+                    <TextArea disabled={!edit} rows={6} />
+                  </Form.Item>
                   </Col>
                   <Col>
                   <Row>
-                      <p>Edit</p>
+                    <Button htmlType="submit" type="primary">EDIT ABOUT ME</Button>
                     </Row>
                     <Row>
                       <p>Delete</p>
                     </Row>
                   </Col>
                 </Row>
+                </Form>
+
                 
                 )
               }

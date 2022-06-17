@@ -223,7 +223,7 @@ function Game() {
                 <TextArea rows={6} />
               </Form.Item>
               <Form.Item label="Rating" name="rating" rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
-                <InputNumber />
+                <InputNumber min={0} max={100} />
               </Form.Item>
               <Form.Item>
                 <Button style={{float: "right"}} htmlType="submit">Submit review</Button>
@@ -255,7 +255,7 @@ function Game() {
                       <Col>
 
                         <Form.Item name="rating" initialValue={review.rating} rules={[{ required: true, message: 'Please enter the rating you want to give this game!' }]}>
-                          <InputNumber disabled={!edit}/>
+                          <InputNumber min={0} max={100} disabled={!edit}/>
                         </Form.Item>
                         
                       </Col>

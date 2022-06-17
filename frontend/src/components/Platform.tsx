@@ -9,6 +9,7 @@ import LayoutHeader from './Header';
 import MainFooter from "./MainFooter";
 import SmallGameCard from './SmallGameCard';
 import { HomeOutlined } from '@ant-design/icons';
+import '../styles/platform.css';
 
 export interface PlatformProps{
     id:string,
@@ -26,7 +27,6 @@ const { Content } = Layout;
 function Platform() {
     const { id } = useParams()
     const { data, error } = useSWR(`http://localhost:4000/api/platforms/${id}`, fetcher);
-    const navigate = useNavigate();
 
     if (error) return <div>failed to load</div>;
     if (!data) return <div>loading...</div>;
@@ -50,8 +50,8 @@ function Platform() {
             <Row style={{ backgroundColor:"#030d16"}}>
                 <Col span={5}/>
                 <Col span={14}>
-                    <h1 style={{textAlign:"center", color:"white", fontSize:"50px"}}>{platform.name}</h1>
-                    <h3 style={{textAlign:"justify", color:"grey"}}>{platform.description}</h3>
+                    <h1 className='platform-title'>{platform.name}</h1>
+                    <h3 className='platform-description'>{platform.description}</h3>
                 </Col>
                 <Col span={5}/>
             </Row>

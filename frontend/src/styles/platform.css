@@ -1,0 +1,10 @@
+.platform-title {
+    text-align: center;
+    color: white;
+    font-size: 50px;
+}
+
+.platform-description {
+    text-align: justify;
+    color: grey;
+}

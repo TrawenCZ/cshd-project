@@ -30,7 +30,6 @@ const LoginForm: React.FC = () => {
     }
 
     const req = await axios.post('http://localhost:4000/api/login', requestData , {headers, withCredentials: true})
-    console.log(req)
     if (req.status === 206) {
       setError(ErrorRegister.USERNAME_NULL);
     }else if(req.status === 207) {

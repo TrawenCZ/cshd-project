@@ -158,7 +158,7 @@ function Game() {
             <h1 style={{color:"black", fontSize:"50px"}}>{game.rating}%</h1>
           </Row>
 
-            <Carousel>
+            <Carousel autoplay>
             {game.pictures.map((picture => {
                 if (!picture.isMain) {
                 return(

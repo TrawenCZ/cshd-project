@@ -44,33 +44,8 @@ export const search = async (req: Request, res: Response) => {
             skip: page * 10,
             take: 10
         })
-        const users = await prisma.user.findMany({
-            where: {
-                OR : [{
-                    username: {
-                        contains: data.value
-                    }
-                },
-                    {
-                        aboutMe: {
-                            contains: data.value
-                        }
-                    }],
-            },
-            select: {
-                id: true,
-                username: true,
-                profilePicture: true
-            },
-            orderBy: {
-                username: "asc"
-            },
-            skip: page * 5,
-            take: 5
-        })
         const output = {
             games: games,
-            users: users
         }
         return res.send({
             status: "success",

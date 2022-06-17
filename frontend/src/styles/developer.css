@@ -1,0 +1,10 @@
+.developer-title {
+    text-align: center;
+    color: white;
+    font-size: 50px;
+}
+
+.developer-description {
+    text-align: justify;
+    color: grey;
+}

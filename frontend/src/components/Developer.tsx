@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import LayoutHeader from './Header';
 import MainFooter from "./MainFooter";
 import SmallGameCard from './SmallGameCard';
+import '../styles/developer.css'
 
 export interface DeveloperProps{
     id:string,
@@ -40,8 +41,8 @@ function Developer() {
         <Row style={{ backgroundColor:"#030d16"}}>
             <Col span={5}/>
             <Col span={14}>
-                <h1 style={{textAlign:"center", color:"white", fontSize:"50px"}}>{developer.name}</h1>
-                <h3 style={{textAlign:"justify", color:"grey"}}>{developer.description}</h3>
+                <h1 className='developer-title'>{developer.name}</h1>
+                <h3 className='developer-description'>{developer.description}</h3>
             </Col>
             <Col span={5}/>
         </Row>

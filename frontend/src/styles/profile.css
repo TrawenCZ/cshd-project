@@ -1,0 +1,23 @@
+.profile-icon {
+    object-fit: cover;
+    width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+}
+
+.profile-info {
+    resize: none;
+    font-size: 1.3em;
+    color: black;
+    margin: 0;
+}
+
+.profile-username {
+    text-align: center;
+    color: white;
+}
+
+.profile-edit__button {
+    margin: 0;
+    float: left;
+}

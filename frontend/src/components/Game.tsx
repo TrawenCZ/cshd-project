@@ -117,7 +117,7 @@ function Game() {
     }   
   }
   const deleteYourReview = () => {
-    axios.delete(`http://localhost:4000/api/reviews/${reviewId}`, {headers, withCredentials: true})
+    axios.delete(`http://localhost:4000/api/reviews/${reviewId}`, {headers, withCredentials: true});
   }
   const onEdit = async (values: FormValues) => {
     const requestData: RequestValues = {
@@ -206,7 +206,7 @@ function Game() {
           </Row>
             
             {/* TODO if user wrote review on this game*/}
-          {loggedId && 
+          {loggedId && reviewId == "" &&
               <Form
               name="basic"
               labelCol={{ span: 3 }}

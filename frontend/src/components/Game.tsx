@@ -160,11 +160,13 @@ function Game() {
 
             <Carousel>
             {game.pictures.map((picture => {
+                if (!picture.isMain) {
                 return(
                 <div>
                   <Image src={picture.source}/>
                 </div>
-                )
+                )                     
+                }
               }))}
             </Carousel>
           <Row justify="space-between">

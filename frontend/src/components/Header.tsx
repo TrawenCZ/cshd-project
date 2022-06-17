@@ -11,7 +11,7 @@ import { DownOutlined } from '@ant-design/icons';
 const { Search } = Input
 const { Header, Footer, Sider, Content, } = Layout;
 
-function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRatingRange, setReleaseRange, setSearchInput}: any) {
+function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRatingRange, setReleaseRange, setSearchInput, releaseValue, ratingValue, searchInput, setPage}: any) {
   const menu = (
     <Menu
       items={[
@@ -22,7 +22,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
           children: [
             {
               key: 'releaseSlider',
-              label: (<Slider range defaultValue={[1980, new Date().getFullYear()]} min={1980} max={new Date().getFullYear()} onChange={(value) => setReleaseRange(value)}/>),
+              label: (<Slider range defaultValue={[1980, new Date().getFullYear()]} min={1980} max={new Date().getFullYear()} onChange={(value) => setReleaseRange(value)} value={releaseValue}/>),
             },
           ],
         },
@@ -33,7 +33,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
           children: [
             {
               key: 'ratingSlider',
-              label: (<Slider range defaultValue={[0, 100]} min={0} max={100} onChange={(value) => setRatingRange(value)} />),
+              label: (<Slider range defaultValue={[0, 100]} min={0} max={100} onChange={(value) => setRatingRange(value)} value={ratingValue}/>),
             },
           ],
         },
@@ -44,7 +44,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
           children: [
             {
               key: 'searchInput',
-              label: (<Search onSearch={(value) => setSearchInput(value)}/>),
+              label: (<Search onSearch={(value) => setSearchInput(value)} defaultValue=''/>),
             },
           ],
         }
@@ -61,6 +61,7 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
   const valKey = [[[30, 31],["Register","Login"]],[[32, 33],["Logout","Profile page"]]]
   const [decider, setDecider] = useState(0)
   const [userId, setUserId] = useState(undefined)
+  const [selectedKeys, setSelectedKeys] = useState(['11', '21'])
 
   useEffect(() => {
     axios.get('http://localhost:4000/api/loggedUser', {headers, withCredentials: true}).then(response => {
@@ -87,6 +88,8 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
   }
 
   function menuClick({ item, key, keyPath, selectedKeys, domEvent }: any){
+    setSelectedKeys(selectedKeys)
+    setPage(0)
     if (genreChildren.map(genre => genre.key).includes(key)){
       if (selectedKeys.includes('21')){
         setGenre(undefined);
@@ -129,12 +132,20 @@ function LayoutHeader({setGenre, setProfileId, setLoggedId, setPlatforms, setRat
   }
   return (
     <Header>
-        <Link to={'/'}><img src={logo} className='logo' alt="CSHD Logo"></img></Link>
+        <Link 
+        to={'/'} 
+        onClick={() => {
+          setGenre(undefined); setPlatforms(undefined); setRatingRange([0, 100]); setReleaseRange([1980, new Date().getFullYear()]); setSearchInput('');
+          setSelectedKeys(['11', '21']); setPage(0); setSearchInput('')
+        }}><img src={logo} className='logo' alt="CSHD Logo"></img></Link>
           {window.location.pathname === "/" &&
             <Menu
+                defaultSelectedKeys={['21', '11']}
+                key=''
                 mode='horizontal'
                 theme='dark'
                 multiple={true}
+                selectedKeys={selectedKeys}
                 onSelect={menuClick}
                 onDeselect={menuClick}
                 items={[

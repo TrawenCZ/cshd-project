@@ -81,7 +81,9 @@ function MainPage() {
   return (
     <>
     <Layout>
-      <LayoutHeader setGenre={setGenres} setPlatforms={setPlatforms} setReleaseRange={setReleaseRange} setRatingRange={setRatingRange} setSearchInput={setSearchInput}/>
+      <LayoutHeader setGenre={setGenres} setPlatforms={setPlatforms} setReleaseRange={setReleaseRange} setRatingRange={setRatingRange} setSearchInput={setSearchInput}
+      releaseValue={releaseRange} ratingValue={ratingRange} setPage={setPage} searchInput={searchInput}
+      />
       <Content>
         <div className='pagination'>
           {games.length > 0 && <Button shape="circle" className='pageButton' icon={<LeftOutlined />} size="large" onClick={(event) => setPage(page-1)} disabled={!prevEnabled}/>}

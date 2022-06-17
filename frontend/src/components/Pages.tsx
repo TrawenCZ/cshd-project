@@ -9,6 +9,8 @@ import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import Developer from './Developer';
 import Platform from './Platform';
+import Genre from './Genre';
+
 
 export const Pages = () => {
   return (
@@ -21,6 +23,8 @@ export const Pages = () => {
         <Route path="/game/:id" element={<Game />}/>
         <Route path="/developer/:id" element={<Developer />}/>
         <Route path="/platform/:id" element={<Platform />}/>
+        <Route path="/genre/:id" element={<Genre />}/>
+
 
       </Routes>
     </BrowserRouter>

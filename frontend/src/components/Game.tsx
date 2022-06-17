@@ -153,7 +153,7 @@ function Game() {
     <LayoutHeader setGenres={setGenre}/>
       <Content>
         <Row justify="center" gutter={[24, 24]}>
-        <Col  flex="1 0 100%">
+        <Col  flex="1 0 100%" style={{paddingLeft:"20px", paddingRight:"20px"}}>
           <Row justify="space-between">
             <h1 style={{color:"black", fontSize:"50px"}}>{game.name}</h1>
             <h1 style={{color:"black", fontSize:"50px"}}>{game.rating}%</h1>
@@ -339,7 +339,7 @@ function Game() {
               }
               }))}
         </Col>
-        <Col flex="1 0 100%">
+        <Col flex="1 0 100%" style={{paddingLeft:"20px", paddingRight:"20px"}}>
           <Row justify="center">
             <div>
               <Image src={game.pictures[0].source}/>
@@ -382,7 +382,7 @@ function Game() {
       <LayoutHeader setGenres={setGenre}/>
         <Content>
           <Row justify="center" gutter={[24, 24]}>
-          <Col span={11}>
+          <Col span={11} >
             <Row justify="space-between">
               <h1 style={{color:"black", fontSize:"50px"}}>{game.name}</h1>
               <h1 style={{color:"black", fontSize:"50px"}}>{game.rating}%</h1>
@@ -568,7 +568,7 @@ function Game() {
                 }
                 }))}
           </Col>
-          <Col span={5}>
+          <Col span={5} style={{paddingTop:"20px"}}>
             <Row justify="center">
               <div>
                 <Image src={game.pictures[0].source}/>

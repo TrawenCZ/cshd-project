@@ -107,7 +107,7 @@ function Game() {
       gameId: game.id
     }
     const req =  axios.post('http://localhost:4000/api/reviews', requestData, {headers, withCredentials: true})
-    
+
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -206,13 +206,65 @@ function Game() {
               </Form>}
 
 
-          <Row>
-             {/* TODO Your Review - idk what the getter is */}
-          </Row>
 
-            {game.reviews.map(((review, index) => {
+             {/* TODO Your Review - idk what the getter is */}
+             {game.reviews.map(((review, index) => {
+              if (loggedId == review.user.id){
               return(
 
+                
+                <Row style = {{backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
+
+                  <Col>
+                    <Row>
+                      <h2>{review.user.username}</h2>
+                    </Row>
+                    <Row>
+                      <div>
+                        <Link to={`/user/${review.user.id}`}>
+                          <Image width={100} preview={false} src={review.user.profilePicture} />
+                        </Link>
+                      </div>
+                    </Row>
+                    <Row justify="center" gutter={[24, 24]}>
+                      <Col>
+                        <h1>{review.rating}%</h1>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col flex="1">
+                    <Row>
+                      <h2>{review.header}</h2>
+                    </Row>
+                    <Row>
+                      <p>{review.description}</p>
+                    </Row>
+                  </Col>
+                  <Col>
+                  <Row>
+                      <p>Edit</p>
+                    </Row>
+                    <Row>
+                      <p>Delete</p>
+                    </Row>
+                  </Col>
+                </Row>
+                
+                )
+              }
+              }))}
+              <hr/>
+
+            
+
+
+
+            {game.reviews.map(((review, index) => {
+              if (loggedId != review.user.id){
+              return(
+
+                
                 <Row style = {(index % 2 === 0) ? {backgroundColor:"#f5f5f5"} : {backgroundColor:"#d9d9d9"}} justify="space-between" gutter={[24, 24]}>
 
                   <Col>
@@ -241,11 +293,10 @@ function Game() {
                       <p>{review.description}</p>
                     </Row>
                   </Col>
-
-
-
                 </Row>
+                
                 )
+              }
               }))}
         </Col>
         <Col span={5}>

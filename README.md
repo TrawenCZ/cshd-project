@@ -1,3 +1,13 @@
+## Author's note
+- this project was made as a final output of FI MUNI Web Applications and Frameworks Introduction course
+- it's not only my work, there were two more people involved
+
+### My contributions
+- backend implementation
+- model design (with a help of colleagues)
+- helping with developing/debugging fronted React components
+
+
 # PB138-Project-cshd
 
 ## Technical stuff
